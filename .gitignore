@@ -1,0 +1,9 @@
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/SistemaEscolar.web/.vs
+/SistemaEscolar.web/SistemaEscolar.web/bin/Debug/net8.0
+/SistemaEscolar.web/SistemaEscolar.web/obj
+/SistemaEscolar.web/SistemaEscolar.web/SistemaEscolar.web.csproj.user
