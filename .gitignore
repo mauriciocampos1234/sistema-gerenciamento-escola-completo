@@ -3,11 +3,7 @@
 ################################################################################
 
 /.vs
-/SistemaEscolar.web/.vs
-/SistemaEscolar.web/SistemaEscolar.web/bin
-/SistemaEscolar.web/SistemaEscolar.web/obj
-/SistemaEscolar.web/SistemaEscolar.web/SistemaEscolar.web.csproj.user
 /src/.vs
-/src/SistemaEscolar.web/bin/Debug/net8.0
+/src/SistemaEscolar.web/bin
 /src/SistemaEscolar.web/obj
 /src/SistemaEscolar.web/SistemaEscolar.web.csproj.user
