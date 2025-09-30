@@ -1,0 +1,12 @@
+﻿@using SistemaEscolar.web.Models.Erro
+@model ErroViewModel
+@{
+	ViewData["Title"] = "Erro";
+}
+<h1>Ops, ocorreu um erro inesperado</h1>
+
+<h2>Ocorreu um erro na tentativa de processar sua requisição. Tente novamenente mais tarde ou faça contato com o suporte 0800 999 000</h2>
+
+<p>
+	Detalhes do erro: <code>@Model.MensagemErro</code>
+</p>
