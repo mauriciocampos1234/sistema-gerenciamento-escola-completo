@@ -15,7 +15,7 @@ namespace SistemaEscolar.web.Controllers
 
         public IActionResult Index()
         {
-            //throw new Exception("Ocorreu um erro ao carregar a homePage"); //Usado para testar a pagina de erro personalizada
+            throw new Exception("Ocorreu um erro ao carregar a homePage"); //Usado para testar a pagina de erro personalizada
 
             return View();
         }
