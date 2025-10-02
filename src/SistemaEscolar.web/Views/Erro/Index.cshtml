@@ -1,12 +1,33 @@
 ﻿@using SistemaEscolar.web.Models.Erro
 @model ErroViewModel
+
 @{
-	ViewData["Title"] = "Erro";
+    ViewData["Title"] = "Erro";
 }
-<h1>Ops, ocorreu um erro inesperado</h1>
 
-<h2>Ocorreu um erro na tentativa de processar sua requisição. Tente novamenente mais tarde ou faça contato com o suporte 0800 999 000</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-<p>
-	Detalhes do erro: <code>@Model.MensagemErro</code>
-</p>
+            <div class="alert alert-danger shadow-lg rounded-3 p-4">
+                <h1 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                    Ops, ocorreu um erro inesperado
+                </h1>
+                <p class="fs-5">
+                    Ocorreu um erro na tentativa de processar sua requisição.
+                    Tente novamente mais tarde ou entre em contato com o suporte <strong>0800 999 000</strong>.
+                </p>
+                <hr>
+                <p>
+                    <strong>Detalhes do erro:</strong>
+                    <code>@Model.MensagemErro</code>
+                </p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">
+                    Voltar para a Home
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
