@@ -7,7 +7,7 @@
 /src/SistemaEscolar.web/bin
 /src/SistemaEscolar.web/obj
 /src/SistemaEscolar.web/SistemaEscolar.web.csproj.user
-/src/SistemaEscolar.Repositories/bin/Debug/net8.0
+/src/SistemaEscolar.Repositories/bin
 /src/SistemaEscolar.Repositories/obj
-/src/SistemaEscolar.Services/bin/Debug/net8.0
+/src/SistemaEscolar.Services/bin
 /src/SistemaEscolar.Services/obj
