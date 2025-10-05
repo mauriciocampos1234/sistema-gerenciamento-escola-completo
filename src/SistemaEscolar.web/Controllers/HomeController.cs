@@ -1,9 +1,10 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaEscolar.web.Models;
 
 namespace SistemaEscolar.web.Controllers
 {
+    // Autorização somente para usuários autenticados (F5 para abrir e testar para tentar acessar a home. Resulado tem que ser não acessado)
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -1,7 +1,19 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Adicione serviços ao contêiner.
 builder.Services.AddControllersWithViews();
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; // Caminho da Página de login 
+        options.AccessDeniedPath = "/Login"; // Página de acesso negado
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // Tempo de expiração do cookie, após 10 minutos de inatividade
+        options.SlidingExpiration = true; // Renova o cookie se o usuário estiver ativo
+    });
 
 var app = builder.Build();
 
@@ -22,6 +34,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
