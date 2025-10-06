@@ -37,10 +37,18 @@ namespace SistemaEscolar.web.Controllers
                 IsPersistent = model.LembrarMe //Define se o cookie de autenticação deve ser persistente (LembrarMe)
             };
 
-            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), properties); //Realiza o login do usuário, criando o cookie de autenticação
 
             return RedirectToAction("Index", "Home"); //Se for válido, redireciona para a ação Index do controlador Home
+        }
+
+        [HttpPost]
+        [Route("logout")] //Rota para o logout
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //Realiza o logout do usuário, removendo o cookie de autenticação
+            return RedirectToAction("Login", "Usuario"); //Redireciona para a tela de login após o logout
         }
     }
 }
