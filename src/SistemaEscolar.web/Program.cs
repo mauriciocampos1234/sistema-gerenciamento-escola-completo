@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SistemaEscolar.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services
         options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // Tempo de expiração do cookie, após 10 minutos de inatividade
         options.SlidingExpiration = true; // Renova o cookie se o usuário estiver ativo
     });
+
+//Mapeando a injeção de dependência do serviço de usuário (IUsuarioService)
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 var app = builder.Build();
 

@@ -2,7 +2,12 @@
 
 namespace SistemaEscolar.Services
 {
-    public class UsuarioService
+    //Definição da interface IUsuarioService
+    public interface IUsuarioService
+    {
+        ValidarLoginResult ValidarLogin(string email, string senha);
+    }
+    public class UsuarioService : IUsuarioService //Implementação da interface IUsuarioService
     {
         public ValidarLoginResult ValidarLogin(string email, string senha)
         {
