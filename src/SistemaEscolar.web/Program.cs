@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SistemaEscolar.Repositories;
 using SistemaEscolar.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,11 @@ builder.Services
 
 //Mapeando a injeção de dependência do serviço de usuário (IUsuarioService)
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+//Mapeando a injeção de dependência do repositório de usuário (IUsuarioRepository)
+var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString"); //string.Empty; Inicializando a variável connectionString (Mas vamos deixar Empty(Vazia) por enquanto)
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
+
 
 var app = builder.Build();
 
