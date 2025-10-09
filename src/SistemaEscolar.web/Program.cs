@@ -17,6 +17,8 @@ builder.Services
         options.SlidingExpiration = true; // Renova o cookie se o usuário estiver ativo
     });
 
+builder.Configuration.AddEnvironmentVariables(); //Apontando e Adicionando suporte para variáveis de ambiente do Windows
+
 //Mapeando a injeção de dependência do serviço de usuário (IUsuarioService)
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
