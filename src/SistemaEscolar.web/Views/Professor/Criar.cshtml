@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Novo Professor";
+}
+
+<h1>
+    Novo Professor
+</h1>
+
+<form class="row g-3 needs-validation" novalidate>
+    
+    
+    <div class="col-12">
+        <label for="inputNome" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="inputNome" placeholder="Nome completo" required>
+    </div>
+    
+    <div class="col-12">
+        <label for="inputEmail" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="inputEmail" placeholder="Seu melhor E-mail" required>
+    </div>
+    
+    <div class="col-md-6">
+        <label for="inputLogin" class="form-label">Login</label>
+        <input type="text" class="form-control" id="inputLogin" placeholder="Crie seu Login" required>
+    </div>
+    
+    <div class="col-md-6">
+        <label for="inputSenha" class="form-label">Senha</label>
+        <input type="password" class="form-control" id="inputSenha" placeholder="Crie uma Senha Forte" required>
+    </div>
+    
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+            //Pegando o código JS de valdiação do BootStrap-->
+         (() => {
+           'use strict'
+
+           // Busca todos os formulários aos quais queremos aplicar estilos de validação Bootstrap personalizados
+           const forms = document.querySelectorAll('.needs-validation')
+
+           // Faça um loop sobre eles e evite a submissão
+          Array.from(forms).forEach(form => {
+             form.addEventListener('submit', event => {
+               if (!form.checkValidity()) {
+                 event.preventDefault()
+                 event.stopPropagation()
+               }
+
+               form.classList.add('was-validated')
+             }, false)
+           })
+        })()
+    </script>
+}
