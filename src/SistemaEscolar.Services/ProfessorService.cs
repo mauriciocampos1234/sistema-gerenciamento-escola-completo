@@ -1,5 +1,6 @@
 ﻿using SistemaEscolar.Repositories;
 using SistemaEscolar.Services.Enums;
+using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Professor;
 
 namespace SistemaEscolar.Services
@@ -43,14 +44,17 @@ namespace SistemaEscolar.Services
             }
 
 
-                //Inserir o usuário (Lógica para criar um usuário deve ser implementada aqui)
-                // Depois, criar o professor associado ao usuário
-                var usuarioId = _usuarioRepository.Inserir(new Repositories.Entities.Usuario
-            {
-                Login = request.Login,
-                Senha = request.Senha,
-                FuncaolId = (int)Funcao.Professor // Definindo a função como Professor
-            });
+            //Inserir o usuário (Primeira Lógica para criar um usuário deve ser implementada aqui)
+            // Depois, criar o professor associado ao usuário
+            //var usuarioId = _usuarioRepository.Inserir(new Repositories.Entities.Usuario
+            //{
+            //Login = request.Login,
+            //Senha = request.Senha,
+            //FuncaolId = (int)Funcao.Professor // Definindo a função como Professor
+            //});
+
+            //Segunda Lógica Usando o Mapping para mapear o Request para o Usuario
+            var usuarioId = _usuarioRepository.Inserir(request.MapToUsuario());
 
             if (!usuarioId.HasValue)
             {
@@ -60,13 +64,16 @@ namespace SistemaEscolar.Services
             }
 
 
-            // Lógica para inserir um professor
-            _professorRepository.Inserir(new Repositories.Entities.Professor
-            {
-                Nome = request.Nome,
-                Email = request.Email,
-                UsuarioId = usuarioId.Value.ToString() // Associando o professor ao usuário criado
-            });
+            // Primeira Lógica para inserir um professor
+            //_professorRepository.Inserir(new Repositories.Entities.Professor
+            //{
+            //Nome = request.Nome,
+            //Email = request.Email,
+            //UsuarioId = usuarioId.Value.ToString() // Associando o professor ao usuário criado
+            //});
+
+            // Segunda Lógica Usando o Mapping para mapear o Request para o Professor
+            _professorRepository.Inserir(request.MapToProfessorR(usuarioId.Value));
 
             result.Sucesso = true;
             return result;

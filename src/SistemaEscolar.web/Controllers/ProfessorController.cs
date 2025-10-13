@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaEscolar.Services;
+using SistemaEscolar.web.Mappings;
 using SistemaEscolar.web.Models.Professor;
 
 namespace SistemaEscolar.web.Controllers
@@ -37,14 +38,17 @@ namespace SistemaEscolar.web.Controllers
                 return View(model);
             }
 
-            // Lógica para criar um professor usando o serviço de professor e os dados do modelo (ViewModel) fornecido pelo usuário
-            var result = _professorService.Criar(new Services.Models.Professor.CriarProfessorRequest
-            {
-                Login = model.Login!,
-                Senha = model.Senha!,
-                Nome = model.Nome!,
-                Email = model.Email!
-            });
+            // Primeira Lógica para criar um professor usando o serviço de professor e os dados do modelo (ViewModel) fornecido pelo usuário
+            //var result = _professorService.Criar(new Services.Models.Professor.CriarProfessorRequest
+            //{
+            //Login = model.Login!,
+            //Senha = model.Senha!,
+            //Nome = model.Nome!,
+            //Email = model.Email!
+            //});
+
+            // Usando o Mapping para mapear o ViewModel para o Request
+            var result = _professorService.Criar(model.MapToCriarProfessorRequest());
 
             if (!result.Sucesso)
             {
