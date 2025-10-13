@@ -8,6 +8,6 @@
 
         public required string Senha { get; set; }
 
-        public int FuncaolId { get; set; }
+        public int FuncaolId { get; set; } // Corrigido: tornada pública para acesso ao set
     }
 }

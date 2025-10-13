@@ -22,9 +22,17 @@ builder.Configuration.AddEnvironmentVariables(); //Apontando e Adicionando supor
 //Mapeando a injeção de dependência do serviço de usuário (IUsuarioService)
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
+//Mapeando a injeção de dependência do serviço de usuário (IProfessorService)
+builder.Services.AddScoped<IProfessorService, ProfessorService>();
+
 //Mapeando a injeção de dependência do repositório de usuário (IUsuarioRepository)
 var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString"); //string.Empty; Inicializando a variável connectionString (Mas vamos deixar Empty(Vazia) por enquanto)
+
+//Mapeando a injeção de dependência do repositório de usuário (IUsuarioRepository)
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
+
+//Mapeando a injeção de dependência do repositório de professor (IProfessorRepository)
+builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
 
 
 var app = builder.Build();

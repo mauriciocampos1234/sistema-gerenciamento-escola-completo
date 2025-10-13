@@ -7,6 +7,7 @@ namespace SistemaEscolar.Repositories
     public interface IUsuarioRepository
     {
         Usuario? ObterPorLogin(string login);
+        int? Inserir(Usuario usuario);
     }
     public class UsuarioRepository : BaseRepository, IUsuarioRepository //Implementação da interface IUsuarioRepository e BaseRepository
     {
@@ -51,5 +52,36 @@ namespace SistemaEscolar.Repositories
             return usuario;
         }
 
+        public int? Inserir(Usuario usuario)
+        {
+            int? usuarioId = null;
+
+            // Usando a conexão com o banco de dados MySQL
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                // Consulta SQL para inserir um novo professor e obter o ID gerado
+                string query = @"INSERT INTO usuario (login, senha, funcao_id) VALUES (@login, @senha, @funcao_id); 
+                                 SELECT LAST_INSERT_ID()";
+
+                // Criando o comando SQL
+                var cmd = new MySqlCommand(query, conn);
+
+                // Adicionando os parâmetros para evitar SQL Injection
+                cmd.Parameters.AddWithValue("@login", usuario.Login);
+                cmd.Parameters.AddWithValue("@senha", usuario.Senha);
+                cmd.Parameters.AddWithValue("@funcao_id", usuario.FuncaolId);
+
+                // Abrindo a conexão com o banco de dados
+                conn.Open();
+
+                // Executando o comando e obtendo o ID do professor inserido
+                usuarioId = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+            }
+
+            // Retornando o ID do professor inserido
+            return usuarioId;
+        }
     }
 }
