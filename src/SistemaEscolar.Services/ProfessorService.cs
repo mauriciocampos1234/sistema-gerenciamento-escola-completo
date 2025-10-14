@@ -1,5 +1,4 @@
 ﻿using SistemaEscolar.Repositories;
-using SistemaEscolar.Services.Enums;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Professor;
 
@@ -9,6 +8,8 @@ namespace SistemaEscolar.Services
     public interface IProfessorService
     {
         CriarProfessorResult Criar(CriarProfessorRequest request); // Método para criar um professor (Assinatura)
+
+        IList<ProfessorResult> Listar(); // Método para listar todos os professores (Assinatura)
     }
     public class ProfessorService : IProfessorService
     {
@@ -77,6 +78,17 @@ namespace SistemaEscolar.Services
 
             result.Sucesso = true;
             return result;
+        }
+
+        public IList<ProfessorResult> Listar()
+        {
+            var professores = _professorRepository.Listar();
+
+            // Mapear a lista de entidades Professor para ProfessorResult usando o Mapping
+            var result = professores.Select(p => p.MapToProfessorResult()).ToList();
+
+            return result;
+
         }
     }
 }

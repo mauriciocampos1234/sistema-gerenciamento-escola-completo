@@ -47,7 +47,7 @@ namespace SistemaEscolar.web.Controllers
             //Email = model.Email!
             //});
 
-            // Usando o Mapping para mapear o ViewModel para o Request
+            // Segunda lógica - Usando o Mapping para mapear o ViewModel para o Request
             var result = _professorService.Criar(model.MapToCriarProfessorRequest());
 
             if (!result.Sucesso)
@@ -56,10 +56,18 @@ namespace SistemaEscolar.web.Controllers
                 return View(model);
             }
 
-
-
             return RedirectToAction("Index", "Home");
+        }
 
+        //Listar os professores(CRUD)
+        [Route("listar")]
+        public IActionResult Listar()
+        {
+            var professores = _professorService.Listar(); // Chama o serviço para listar todos os professores
+
+            var result = professores.Select(c => c.MapToListarViewModel()).ToList(); // Mapeia os resultados para ViewModel e vira uma lista
+
+            return View(result);
         }
     }
 }

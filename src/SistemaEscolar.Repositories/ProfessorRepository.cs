@@ -8,8 +8,11 @@ namespace SistemaEscolar.Repositories
     {
         // Método para inserir um novo professor no banco de dados (Assinatura)
         public int? Inserir(Professor professor);
+
+        // Metodo para listar todos os professores (Assinatura)
+        IList<Professor> Listar();
     }
-    
+
     // Implementação do repositório de professor
     public class ProfessorRepository: BaseRepository, IProfessorRepository
     {
@@ -49,6 +52,50 @@ namespace SistemaEscolar.Repositories
 
             // Retornando o ID do professor inserido
             return professorId;
+        }
+
+        // Método para listar todos os professores do banco de dados
+        public IList<Professor> Listar()
+        {
+            var result = new List<Professor>();
+
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                // Dica: Quando colamos o script do Workbench, ele traz \r\n (quebra de linha),
+                // então basta dar um CTRL+Z, que ele remove e Colocar o @ depois do = para manter a formatação
+                string query = @"SELECT p.professor_id, p.nome, p.email, u.usuario_id, u.login, u.senha FROM 
+                                professor p INNER JOIN 
+                                usuario u ON p.professor_id = u.usuario_id
+                                ORDER BY
+                                p.professor_id";
+                
+                var cmd = new MySqlCommand(query, conn);
+
+                conn.Open();
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read()) //Enquanto conseguir ler (houver registros(Linhas))
+                    {
+                        var professor = new Professor //Criando um objeto professor para cada registro(Linha) retornado
+                        {
+                            Id = reader.GetInt32("professor_id"),
+                            Nome = reader.GetString("nome"),
+                            Email = reader.GetString("email"),
+                            UsuarioId = reader.GetInt32("usuario_id"),
+
+                            Usuario = new Usuario
+                            {
+                                Id = reader.GetInt32("usuario_id"),
+                                Login = reader.GetString("login"),
+                                Senha = reader.GetString("senha")
+                            }
+                        };
+                        result.Add(professor);
+                    }
+                }
+            }
+            return result;
         }
     }
 }

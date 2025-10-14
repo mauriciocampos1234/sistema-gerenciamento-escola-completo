@@ -1,4 +1,5 @@
-﻿using SistemaEscolar.Services.Models.Professor;
+﻿using MySqlX.XDevAPI.Common;
+using SistemaEscolar.Services.Models.Professor;
 using SistemaEscolar.web.Models.Professor;
 
 namespace SistemaEscolar.web.Mappings
@@ -16,6 +17,18 @@ namespace SistemaEscolar.web.Mappings
             };
 
             return request;
+        }
+
+        public static ListarViewModel MapToListarViewModel(this ProfessorResult model)
+        {
+            var ViewModel = new ListarViewModel
+            {
+                Id = model.Id,
+                Nome = model.Nome,
+                Email = model.Email,
+                Login = model.Login!
+            };
+            return ViewModel;
         }
     }
 }
