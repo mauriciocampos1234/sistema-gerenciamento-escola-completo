@@ -28,9 +28,21 @@ namespace SistemaEscolar.Services.Mappings
                 Email = professor.Email,
                 Login = professor.Usuario?.Login,
                 Senha = professor.Usuario?.Senha,
-                UsuarioId = professor.UsuarioId
+                //UsuarioId = professor.UsuarioId
             };
             return result;
+        }
+
+        
+        public static Professor MapToProfessor(this EditarProfessorRequest request)
+        {
+            var professor = new Professor
+            {
+                Id = request.Id,
+                Nome = request.Nome!,
+                Email = request.Email
+            };
+            return professor;
         }
     }
 }

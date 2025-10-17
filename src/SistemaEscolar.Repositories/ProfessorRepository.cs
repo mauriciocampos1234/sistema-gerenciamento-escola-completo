@@ -9,8 +9,17 @@ namespace SistemaEscolar.Repositories
         // Método para inserir um novo professor no banco de dados (Assinatura)
         public int? Inserir(Professor professor);
 
+        //método para atualizar um professor no banco de dados (Assinatura)
+        int? Atualizar(Professor professor);
+
+        //Método para apagar(Excluir)um professor no banco de dados (Assinatura)
+        int? Apagar(int id);
+
         // Metodo para listar todos os professores (Assinatura)
         IList<Professor> Listar();
+
+        // Metodo para obter um professor pelo ID (Assinatura)
+        Professor? ObterPorId(int id);
     }
 
     // Implementação do repositório de professor
@@ -20,6 +29,8 @@ namespace SistemaEscolar.Repositories
         public ProfessorRepository(string connectionString) : base(connectionString)
         {
         }
+
+        
 
         // Método para inserir um novo professor no banco de dados
         public int? Inserir(Professor professor)
@@ -54,6 +65,32 @@ namespace SistemaEscolar.Repositories
             return professorId;
         }
 
+        public int? Atualizar(Professor professor)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = @"UPDATE professor SET nome = @nome, email = @email WHERE professor_id = @professor_id";
+                
+                var cmd = new MySqlCommand(query, conn);
+                
+                cmd.Parameters.AddWithValue("@nome", professor.Nome);
+                cmd.Parameters.AddWithValue("@email", professor.Email);
+                cmd.Parameters.AddWithValue("@professor_id", professor.Id);
+                
+                conn.Open();
+                
+                var rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return professor.Id;
+                }
+                else
+                {
+                    return null; // Retorna null se nenhum registro foi atualizado
+                }
+            }
+        }
+
         // Método para listar todos os professores do banco de dados
         public IList<Professor> Listar()
         {
@@ -65,7 +102,7 @@ namespace SistemaEscolar.Repositories
                 // então basta dar um CTRL+Z, que ele remove e Colocar o @ depois do = para manter a formatação
                 string query = @"SELECT p.professor_id, p.nome, p.email, u.usuario_id, u.login, u.senha FROM 
                                 professor p INNER JOIN 
-                                usuario u ON p.professor_id = u.usuario_id
+                                usuario u ON p.usuario_id = u.usuario_id
                                 ORDER BY
                                 p.professor_id";
                 
@@ -96,6 +133,63 @@ namespace SistemaEscolar.Repositories
                 }
             }
             return result;
+        }
+
+        public Professor ObterPorId(int id)
+        {
+            Professor? result = null;
+
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = @"SELECT p.professor_id, p.nome, p.email, u.usuario_id, u.login, u.senha FROM 
+                                professor p INNER JOIN 
+                                usuario u ON p.professor_id = u.usuario_id
+                                WHERE p.professor_id = @professor_id";
+                
+                var cmd = new MySqlCommand(query, conn);
+                
+                cmd.Parameters.AddWithValue("professor_id", id);
+                
+                conn.Open();
+                
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) //Se conseguir ler (houver registro(Linha))
+                    {
+                        result = new Professor //Criando um objeto professor para o registro(Linha) retornado
+                        {
+                            Id = reader.GetInt32("professor_id"),
+                            Nome = reader.GetString("nome"),
+                            Email = reader.GetString("email"),
+                            UsuarioId = reader.GetInt32("usuario_id"),
+                            
+                            Usuario = new Usuario
+                            {
+                                Id = reader.GetInt32("usuario_id"),
+                                Login = reader.GetString("login"),
+                                Senha = reader.GetString("senha")
+                            }
+                        };
+                    }
+                }
+            }
+            return result!;
+        }
+
+        public int? Apagar(int id)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = "DELETE FROM professor WHERE professor_id = @professor_id";
+
+                var cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@professor_id", id);
+
+                conn.Open();
+
+                return cmd.ExecuteNonQuery();
+            }
         }
     }
 }

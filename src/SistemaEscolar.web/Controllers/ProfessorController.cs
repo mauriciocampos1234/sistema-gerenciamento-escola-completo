@@ -69,5 +69,56 @@ namespace SistemaEscolar.web.Controllers
 
             return View(result);
         }
+
+        //Editar os professores(CRUD)
+        [Route("editar/{id}")]
+        public IActionResult Editar(int id)
+        {
+            var professor = _professorService.ObterPorId(id); // Chama o serviço para obter o professor pelo ID
+
+            var model = professor?.MapToEditarViewModel();
+            
+            return View(model);
+        }
+
+        //Salvar as alterações em editar
+        [Route("editar/{id}")]
+        [HttpPost]
+        public IActionResult Editar(EditarViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var request = model.MapToEditarProfessorRequest();
+
+            var result = _professorService.Editar(request);
+
+            if (!result.Sucesso)
+            {
+                ModelState.AddModelError(string.Empty, result.MensagemErro!);
+                
+                return View(model);
+            }
+
+            return RedirectToAction("Listar");
+        }
+
+        [Route("excluir/{id}")]
+        [HttpPost]
+        public IActionResult Excluir(EditarViewModel model)
+        {
+            var result = _professorService.Excluir(model.Id);
+            if (!result.Sucesso)
+            {
+                ModelState.AddModelError(string.Empty, result.MensagemErro!);
+                
+                return View(model);
+            }
+            return RedirectToAction("Listar");
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1.Cms;
 using SistemaEscolar.Repositories.Entities;
 
 namespace SistemaEscolar.Repositories
@@ -6,8 +7,14 @@ namespace SistemaEscolar.Repositories
     //Definição da interface IUsuarioRepository
     public interface IUsuarioRepository
     {
-        Usuario? ObterPorLogin(string login);
-        int? Inserir(Usuario usuario);
+        Usuario? ObterPorLogin(string login); //Método para obter um usuário pelo login
+        int? Inserir(Usuario usuario); //Método para inserir um novo usuário
+
+        int? Atualizar(Usuario usuario); //Método para atualizar um usuário existente
+
+        int? Apagar(int id); //Método para apagar um usuário existente
+
+
     }
     public class UsuarioRepository : BaseRepository, IUsuarioRepository //Implementação da interface IUsuarioRepository e BaseRepository
     {
@@ -82,6 +89,40 @@ namespace SistemaEscolar.Repositories
 
             // Retornando o ID do professor inserido
             return usuarioId;
+        }
+
+        public int? Atualizar(Usuario usuario)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                var query = @"UPDATE usuario SET login = @login, senha = @senha WHERE usuario_id = @usuario_id";
+                
+                var cmd = new MySqlCommand(query, conn);
+                
+                cmd.Parameters.AddWithValue("@login", usuario.Login);
+                cmd.Parameters.AddWithValue("@senha", usuario.Senha);
+                cmd.Parameters.AddWithValue("@usuario_id", usuario.Id);
+                
+                conn.Open();
+
+                return cmd.ExecuteNonQuery();
+            }
+        }
+
+        public int? Apagar(int id)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                var query = @"DELETE FROM usuario WHERE usuario_id = @usuario_id";
+                
+                var cmd = new MySqlCommand(query, conn);
+                
+                cmd.Parameters.AddWithValue("@usuario_id", id);
+                
+                conn.Open();
+                
+                return cmd.ExecuteNonQuery();
+            }
         }
     }
 }

@@ -9,7 +9,13 @@ namespace SistemaEscolar.Services
     {
         CriarProfessorResult Criar(CriarProfessorRequest request); // Método para criar um professor (Assinatura)
 
+        EditarProfessorResult Editar(EditarProfessorRequest request); // Método para editar um professor (Assinatura)
+
+        ExcluirProfessorResult Excluir(int id);
+
         IList<ProfessorResult> Listar(); // Método para listar todos os professores (Assinatura)
+
+        ProfessorResult? ObterPorId(int id); // Método para obter um professor pelo ID (Assinatura)
     }
     public class ProfessorService : IProfessorService
     {
@@ -80,6 +86,83 @@ namespace SistemaEscolar.Services
             return result;
         }
 
+        public EditarProfessorResult Editar(EditarProfessorRequest request)
+        {
+            //Fazer verificação na hora de editar se nenhum outro usuario possue o mesmo login quando bate no BD
+            var result = new EditarProfessorResult();
+            
+            var usuarioExistente = _usuarioRepository.ObterPorLogin(request.Login);
+            
+            if (usuarioExistente != null && usuarioExistente.Id != request.Id)
+            {
+                result.MensagemErro = "Já existe outro Usuário com este Login.";
+
+                return result;
+            }
+            //Mapear o EditarProfessorRequest para a entidade Professor usando o Mapping
+            var professor = request.MapToProfessor();
+
+            //Atualizar o usuário (Primeira Lógica para atualizar um usuário deve ser implementada aqui)
+            var affectedRows = _professorRepository.Atualizar(professor);
+            
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível atualizar o professor.";
+                return result;
+            }
+
+            var usuario = request.MapToUsuario();
+
+            affectedRows = _usuarioRepository.Atualizar(usuario);
+
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível atualizar o usuário.";
+                return result;
+            }
+
+            result.Sucesso = true;
+
+            return result;
+
+        }
+
+        public ExcluirProfessorResult Excluir(int id)
+        {
+            var result = new ExcluirProfessorResult();
+
+            var professor = _professorRepository.ObterPorId(id);
+
+            if (professor == null)
+            {
+                result.MensagemErro = "Professor não existe.";
+                return result;
+            }
+
+            var affectedRows = _professorRepository.Apagar(id);
+            
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível excluir o professor.";
+                return result;
+            }
+
+            //Excluir o usuário associado ao professor
+            affectedRows = _usuarioRepository.Apagar(professor.UsuarioId);
+
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível excluir o usuário.";
+                return result;
+            }
+
+
+            result.Sucesso = true;
+            
+            return result;
+
+        }
+
         public IList<ProfessorResult> Listar()
         {
             var professores = _professorRepository.Listar();
@@ -89,6 +172,19 @@ namespace SistemaEscolar.Services
 
             return result;
 
+        }
+
+        public ProfessorResult? ObterPorId(int id)
+        {
+            var professor = _professorRepository.ObterPorId(id); // Chama o repositório para obter o professor pelo ID
+
+            if (professor == null) 
+                return null; // Retorna null(Vazio) se o professor não for encontrado
+
+                var result = professor.MapToProfessorResult(); // Mapeia a entidade para ProfessorResult usando o Mapping
+
+                return result;
+            
         }
     }
 }

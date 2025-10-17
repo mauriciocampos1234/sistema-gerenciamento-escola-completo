@@ -1,5 +1,4 @@
-﻿using MySqlX.XDevAPI.Common;
-using SistemaEscolar.Services.Models.Professor;
+﻿using SistemaEscolar.Services.Models.Professor;
 using SistemaEscolar.web.Models.Professor;
 
 namespace SistemaEscolar.web.Mappings
@@ -29,6 +28,33 @@ namespace SistemaEscolar.web.Mappings
                 Login = model.Login!
             };
             return ViewModel;
+        }
+
+        public static EditarViewModel MapToEditarViewModel(this ProfessorResult model)
+        {
+            var viewModel = new EditarViewModel
+            {
+                Id = model.Id,
+                Nome = model.Nome,
+                Email = model.Email,
+                Login = model.Login!,
+                Senha = model.Senha!
+            };
+          
+            return viewModel;
+        }
+
+        public static EditarProfessorRequest MapToEditarProfessorRequest(this EditarViewModel model)
+        {
+            var request = new EditarProfessorRequest
+            {
+                Id = model.Id,
+                Nome = model.Nome!,
+                Email = model.Email!,
+                Login = model.Login!,
+                Senha = model.Senha!
+            };
+            return request;
         }
     }
 }
