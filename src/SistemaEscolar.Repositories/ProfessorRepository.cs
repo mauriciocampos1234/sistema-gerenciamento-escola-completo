@@ -143,7 +143,7 @@ namespace SistemaEscolar.Repositories
             {
                 string query = @"SELECT p.professor_id, p.nome, p.email, u.usuario_id, u.login, u.senha FROM 
                                 professor p INNER JOIN 
-                                usuario u ON p.professor_id = u.usuario_id
+                                usuario u ON p.usuario_id = u.usuario_id
                                 WHERE p.professor_id = @professor_id";
                 
                 var cmd = new MySqlCommand(query, conn);

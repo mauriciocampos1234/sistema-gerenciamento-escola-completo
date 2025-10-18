@@ -93,7 +93,7 @@ namespace SistemaEscolar.Services
             
             var usuarioExistente = _usuarioRepository.ObterPorLogin(request.Login);
             
-            if (usuarioExistente != null && usuarioExistente.Id != request.Id)
+            if (usuarioExistente != null && usuarioExistente.Id != request.UsuarioId)
             {
                 result.MensagemErro = "Já existe outro Usuário com este Login.";
 

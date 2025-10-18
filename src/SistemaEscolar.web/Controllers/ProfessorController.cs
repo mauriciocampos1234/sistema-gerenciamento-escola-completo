@@ -56,7 +56,7 @@ namespace SistemaEscolar.web.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Listar");
         }
 
         //Listar os professores(CRUD)

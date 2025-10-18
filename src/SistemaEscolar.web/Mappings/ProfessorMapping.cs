@@ -35,6 +35,7 @@ namespace SistemaEscolar.web.Mappings
             var viewModel = new EditarViewModel
             {
                 Id = model.Id,
+                UsuarioId = model.UsuarioId,
                 Nome = model.Nome,
                 Email = model.Email,
                 Login = model.Login!,
@@ -49,6 +50,7 @@ namespace SistemaEscolar.web.Mappings
             var request = new EditarProfessorRequest
             {
                 Id = model.Id,
+                UsuarioId = model.UsuarioId,
                 Nome = model.Nome!,
                 Email = model.Email!,
                 Login = model.Login!,
