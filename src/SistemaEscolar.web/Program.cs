@@ -34,6 +34,10 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new Usuar
 //Mapeando a injeção de dependência do repositório de professor (IProfessorRepository)
 builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
 
+// Registrar repositório e service do Aluno
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(c => new AlunoRepository(connectionString!));
+builder.Services.AddScoped<IAlunoService, AlunoService>();
+
 
 var app = builder.Build();
 

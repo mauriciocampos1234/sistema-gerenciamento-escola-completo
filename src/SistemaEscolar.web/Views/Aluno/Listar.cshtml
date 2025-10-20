@@ -1,0 +1,48 @@
+﻿@model IList<SistemaEscolar.web.Models.Aluno.ListarViewModel>
+@{
+    ViewData["Title"] = "Listar Aluno";
+}
+
+<h1 class="py-4">Lista de Alunos</h1>
+
+<div class="d-flex py-2">
+    <a class="btn btn-primary" asp-controller="Aluno" asp-action="Criar">
+        Adicionar Aluno
+    </a>
+</div>
+
+<div class="table-responsive d-flex py-2">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Email</th>
+                <th scope="col">Login</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var professor in Model) // Percorre a lista de professores
+            {
+                <tr>
+                    <td>@professor.Id</td>
+                    <td>@professor.Nome</td>
+                    <td>@professor.Email</td>
+                    <td>@professor.Login</td>
+
+                    <td>
+                        <a class="link-underline link-underline-opacity-0"
+                           asp-controller="Aluno" asp-action="Editar" asp-route-id="@professor.Id">
+                            Editar
+                        </a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+
+    </table>
+</div>
