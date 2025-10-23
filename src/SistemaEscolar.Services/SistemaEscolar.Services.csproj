@@ -10,4 +10,10 @@
     <ProjectReference Include="..\SistemaEscolar.Repositories\SistemaEscolar.Repositories.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Aluno\" />
+    <Folder Include="Models\Professor\" />
+    <Folder Include="Models\Turma\" />
+  </ItemGroup>
+
 </Project>

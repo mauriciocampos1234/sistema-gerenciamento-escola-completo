@@ -4,39 +4,31 @@ using SistemaEscolar.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicione serviços ao contêiner.
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login"; // Caminho da Página de login 
-        options.AccessDeniedPath = "/Login"; // Página de acesso negado
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // Tempo de expiração do cookie, após 10 minutos de inatividade
-        options.SlidingExpiration = true; // Renova o cookie se o usuário estiver ativo
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
 
-builder.Configuration.AddEnvironmentVariables(); //Apontando e Adicionando suporte para variáveis de ambiente do Windows
+builder.Configuration.AddEnvironmentVariables();
 
-//Mapeando a injeção de dependência do serviço de usuário (IUsuarioService)
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
-
-//Mapeando a injeção de dependência do serviço de usuário (IProfessorService)
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
-
-//Mapeando a injeção de dependência do repositório de usuário (IUsuarioRepository)
-var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString"); //string.Empty; Inicializando a variável connectionString (Mas vamos deixar Empty(Vazia) por enquanto)
-
-//Mapeando a injeção de dependência do repositório de usuário (IUsuarioRepository)
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
-
-//Mapeando a injeção de dependência do repositório de professor (IProfessorRepository)
-builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
-
-// Registrar repositório e service do Aluno
-builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(c => new AlunoRepository(connectionString!));
 builder.Services.AddScoped<IAlunoService, AlunoService>();
+builder.Services.AddScoped<ITurmaService, TurmaService>();
+
+var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString"); 
+
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
+builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(c => new AlunoRepository(connectionString!));
+builder.Services.AddScoped<ITurmaRepository, TurmaRepository>(c => new TurmaRepository(connectionString!));
 
 
 var app = builder.Build();

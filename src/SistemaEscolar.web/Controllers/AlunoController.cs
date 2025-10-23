@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SistemaEscolar.Services;
-using SistemaEscolar.web.Mappings;
+﻿using SistemaEscolar.Services;
+using SistemaEscolar.Services.Models.Aluno;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaEscolar.web.Models.Aluno;
+using SistemaEscolar.web.Mappings;
 
-namespace SistemaEscolar.web.Controllers
+namespace SistemaEscolar.Web.Controllers
 {
     [Route("aluno")]
+    [Authorize]
     public class AlunoController : Controller
     {
         private readonly IAlunoService _alunoService;
@@ -26,13 +29,17 @@ namespace SistemaEscolar.web.Controllers
         public IActionResult Criar(CriarViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
+            //criar o aluno
             var result = _alunoService.Criar(model.MapToCriarAlunoRequest());
 
             if (!result.Sucesso)
             {
-                ModelState.AddModelError(string.Empty, result.MensagemErro ?? "Erro ao criar aluno.");
+                ModelState.AddModelError(string.Empty, result.MensagemErro!);
+
                 return View(model);
             }
 
@@ -42,48 +49,57 @@ namespace SistemaEscolar.web.Controllers
         [Route("listar")]
         public IActionResult Listar()
         {
-            var alunos = _alunoService.Listar();
-            var vm = alunos.Select(a => a.MapToListarViewModel()).ToList();
-            return View(vm);
+            var alunoes = _alunoService.Listar();
+
+            var result = alunoes.Select(c => c.MapToListarViewModel()).ToList();
+
+            return View(result);
         }
 
         [Route("editar/{id}")]
         public IActionResult Editar(int id)
         {
             var aluno = _alunoService.ObterPorId(id);
+
             var model = aluno?.MapToEditarViewModel();
+
             return View(model);
         }
 
-        [HttpPost]
         [Route("editar/{id}")]
+        [HttpPost]
         public IActionResult Editar(EditarViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
             var request = model.MapToEditarAlunoRequest();
+
             var result = _alunoService.Editar(request);
 
             if (!result.Sucesso)
             {
-                ModelState.AddModelError(string.Empty, result.MensagemErro ?? "Erro ao editar aluno.");
+                ModelState.AddModelError(string.Empty, result.MensagemErro!);
+
                 return View(model);
             }
 
             return RedirectToAction("Listar");
         }
 
-        [HttpPost]
         [Route("excluir/{id}")]
+        [HttpPost]
         public IActionResult Excluir(EditarViewModel model)
         {
             var result = _alunoService.Excluir(model.Id);
 
             if (!result.Sucesso)
             {
-                ModelState.AddModelError(string.Empty, result.MensagemErro ?? "Erro ao excluir aluno.");
-                return View("Editar", model);
+                ModelState.AddModelError(string.Empty, result.MensagemErro!);
+
+                return View(model);
             }
 
             return RedirectToAction("Listar");

@@ -1,28 +1,41 @@
-﻿using Microsoft.AspNetCore.Authorization; //ok
-using Microsoft.AspNetCore.Mvc; //ok
-using SistemaEscolar.Services; //ok
-using SistemaEscolar.Services.Models.Professor; //ok
-using SistemaEscolar.web.Mappings; //ok
-using SistemaEscolar.web.Models.Professor; //ok
-
+﻿using SistemaEscolar.Services;
+using SistemaEscolar.web.Models.Turma;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SistemaEscolar.web.Mappings;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SistemaEscolar.Web.Controllers
 {
-    [Route("professor")]
-    [Authorize(Roles = "Administrador")]
-    public class ProfessorController : Controller
+    [Route("turma")]
+    [Authorize]
+    public class TurmaController : Controller
     {
+        private readonly ITurmaService _turmaService;
         private readonly IProfessorService _professorService;
 
-        public ProfessorController(IProfessorService professorService)
+
+        public TurmaController(ITurmaService turmaService, IProfessorService professorService)
         {
+            _turmaService = turmaService;
             _professorService = professorService;
         }
 
         [Route("criar")]
         public IActionResult Criar()
         {
-            return View();
+            var model = new CriarViewModel();
+            
+            model.Semestres = new List<SelectListItem>
+                {
+                new SelectListItem { Text = "1º Semestre", Value = "1" },
+                new SelectListItem { Text = "2º Semestre", Value = "2" }
+            };
+
+            model.Professores = _professorService.Listar()
+                .Select(p => new SelectListItem(p.Nome, p.Id.ToString())).ToList();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -34,8 +47,8 @@ namespace SistemaEscolar.Web.Controllers
                 return View(model);
             }
 
-            //criar o professor
-            var result = _professorService.Criar(model.MapToCriarProfessorRequest());
+            //criar a turma
+            var result = _turmaService.Criar(model.MapToCriarTurmaRequest());
 
             if (!result.Sucesso)
             {
@@ -50,9 +63,9 @@ namespace SistemaEscolar.Web.Controllers
         [Route("listar")]
         public IActionResult Listar()
         {
-            var professores = _professorService.Listar();
+            var turmas = _turmaService.Listar();
 
-            var result = professores.Select(c => c.MapToListarViewModel()).ToList();
+            var result = turmas.Select(c => c.MapToListarViewModel()).ToList();
 
             return View(result);
         }
@@ -60,9 +73,9 @@ namespace SistemaEscolar.Web.Controllers
         [Route("editar/{id}")]
         public IActionResult Editar(int id)
         {
-            var professor = _professorService.ObterPorId(id);
+            var turma = _turmaService.ObterPorId(id);
 
-            var model = professor?.MapToEditarViewModel();
+            var model = turma?.MapToEditarViewModel();
 
             return View(model);
         }
@@ -76,9 +89,9 @@ namespace SistemaEscolar.Web.Controllers
                 return View(model);
             }
 
-            var request = model.MapToEditarProfessorRequest();
+            var request = model.MapToEditarTurmaRequest();
 
-            var result = _professorService.Editar(request);
+            var result = _turmaService.Editar(request);
 
             if (!result.Sucesso)
             {
@@ -94,7 +107,7 @@ namespace SistemaEscolar.Web.Controllers
         [HttpPost]
         public IActionResult Excluir(EditarViewModel model)
         {
-            var result = _professorService.Excluir(model.Id);
+            var result = _turmaService.Excluir(model.Id);
 
             if (!result.Sucesso)
             {

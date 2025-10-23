@@ -1,55 +1,33 @@
 ﻿using SistemaEscolar.Repositories.Entities;
-using SistemaEscolar.Services.Enums;
 using SistemaEscolar.Services.Models.Aluno;
+using SistemaEscolar.Repositories.Entities;
+using SistemaEscolar.Services.Models.Aluno;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SistemaEscolar.Services.Mappings
 {
     public static class AlunoMapping
     {
-        public static Repositories.Entities.Usuario MapToUsuario(this CriarAlunoRequest request)
+        public static Aluno MapToAluno(this CriarAlunoRequest request, int usuarioId)
         {
-            return new Repositories.Entities.Usuario
-            {
-                Login = request.Login!,
-                Senha = request.Senha!,
-                FuncaolId = (int)Funcao.Aluno
-            };
-        }
-
-        public static Repositories.Entities.Usuario MapToUsuario(this EditarAlunoRequest request)
-        {
-            return new Repositories.Entities.Usuario
-            {
-                Id = request.UsuarioId,
-                Login = request.Login!,
-                Senha = request.Senha!
-            };
-        }
-
-        public static Repositories.Entities.Aluno MapToAlunoR(this CriarAlunoRequest request, int usuarioId)
-        {
-            return new Repositories.Entities.Aluno
+            var aluno = new Aluno
             {
                 Nome = request.Nome,
-                Email = request.Email ?? string.Empty,
+                Email = request.Email,
                 UsuarioId = usuarioId
             };
+
+            return aluno;
         }
 
-        public static Repositories.Entities.Aluno MapToAluno(this EditarAlunoRequest request)
+        public static AlunoResult MapToAlunoResult(this Aluno aluno)
         {
-            return new Repositories.Entities.Aluno
-            {
-                Id = request.Id,
-                Nome = request.Nome,
-                Email = request.Email ?? string.Empty,
-                UsuarioId = request.UsuarioId
-            };
-        }
-
-        public static AlunoResult MapToAlunoResult(this Repositories.Entities.Aluno aluno)
-        {
-            return new AlunoResult
+            var result = new AlunoResult
             {
                 Id = aluno.Id,
                 UsuarioId = aluno.UsuarioId,
@@ -58,6 +36,20 @@ namespace SistemaEscolar.Services.Mappings
                 Login = aluno.Usuario?.Login,
                 Senha = aluno.Usuario?.Senha
             };
+
+            return result;
+        }
+
+        public static Aluno MapToAluno(this EditarAlunoRequest request)
+        {
+            var aluno = new Aluno
+            {
+                Id = request.Id,
+                Nome = request.Nome,
+                Email = request.Email
+            };
+
+            return aluno;
         }
     }
 }

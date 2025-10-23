@@ -1,0 +1,68 @@
+﻿@model SistemaEscolar.web.Models.Turma.CriarViewModel
+
+@{
+    ViewData["Title"] = "Nova Turma";
+}
+
+<h1 class="py-4">
+    Nova Turma
+</h1>
+
+<form class="row g-3 needs-validation" asp-controller="Turma" asp-action="Criar" novalidate>
+    
+    
+    <div class="col-6">
+        <label for="inputAno" class="form-label">Ano</label>
+        <input type="number" class="form-control" id="inputAno" asp-for="Ano" placeholder="Digite o ano letivo" required>
+    </div>
+    
+    <div class="col-6">
+        <label for="selectSemestre" class="form-label">Semestre Vigênte</label>
+        <select id="selectSemestre" class="form-select" asp-items="Model.Semestres" asp-for="Semestre" required></select>
+    </div>
+    
+    <div class="col-md-12">
+        <label for="selectProfessor" class="form-label">Professor(a)</label>
+        <select id="selectProfessor" class="form-select" asp-items="Model.Professores" asp-for="ProfessorId" required></select>
+    </div>
+    
+    <div class="col-md-12">
+        <label for="inputPeriodo" class="form-label">Período</label>
+        <input type="text" class="form-control" id="inputPeriodo" asp-for="Periodo" placeholder="Defina o período" required>
+    </div>
+
+    <div class="col-md-12">
+        <label for="inputNivel" class="form-label">Qual seu nível</label>
+        <input type="text" class="form-control" id="inputNivel" asp-for="Nivel" placeholder="Defina o nível" required>
+    </div>
+    
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+    
+    @Html.ValidationSummary(false, "", new { @class = "text-danger mt-4" })
+</form>
+
+@section Scripts {
+    <script>
+            //Pegando o código JS de valdiação do BootStrap-->
+         (() => {
+           'use strict'
+
+           // Busca todos os formulários aos quais queremos aplicar estilos de validação Bootstrap personalizados
+           const forms = document.querySelectorAll('.needs-validation')
+
+           // Faça um loop sobre eles e evite a submissão
+          Array.from(forms).forEach(form => {
+             form.addEventListener('submit', event => {
+               if (!form.checkValidity()) {
+                 event.preventDefault()
+                 event.stopPropagation()
+               }
+
+               form.classList.add('was-validated')
+             }, false)
+           })
+        })()
+    </script>
+}

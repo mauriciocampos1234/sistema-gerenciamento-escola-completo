@@ -1,17 +1,40 @@
 ﻿using SistemaEscolar.Repositories;
+using SistemaEscolar.Services.Enums;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Aluno;
-using System.Collections.Generic;
-using System.Linq;
+using SistemaEscolar.Repositories;
+using SistemaEscolar.Services.Models.Aluno;
 
 namespace SistemaEscolar.Services
 {
+    public interface IAlunoService
+    {
+        CriarAlunoResult Criar(CriarAlunoRequest request);
+
+        EditarAlunoResult Editar(EditarAlunoRequest request);
+
+        ExcluirAlunoResult Excluir(int id);
+
+        IList<AlunoResult> Listar();
+
+        IList<AlunoResult> ListarPorTurma(int turmaId);
+
+        IList<AlunoResult> ListarPorProfessor(int usuarioId);
+
+        IList<AlunoResult> ListarPorAluno(int usuarioId);
+
+        AlunoResult? ObterPorId(int id);
+
+        AlunoResult? ObterPorUsuarioId(int usuarioId);
+    }
+
     public class AlunoService : IAlunoService
     {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
 
-        public AlunoService(IAlunoRepository alunoRepository, IUsuarioRepository usuarioRepository)
+        public AlunoService(IAlunoRepository alunoRepository,
+            IUsuarioRepository usuarioRepository)
         {
             _alunoRepository = alunoRepository;
             _usuarioRepository = usuarioRepository;
@@ -21,25 +44,44 @@ namespace SistemaEscolar.Services
         {
             var result = new CriarAlunoResult();
 
+            if (request == null)
+            {
+                result.MensagemErro = "Objeto CriarAlunoRequest obrigatório";
+                return result;
+            }
+
             var usuarioExistente = _usuarioRepository.ObterPorLogin(request.Login);
 
             if (usuarioExistente != null)
             {
-                result.MensagemErro = "Usuário já existe.";
+                result.MensagemErro = "Esse usuário já existe";
                 return result;
             }
 
-            var usuarioId = _usuarioRepository.Inserir(request.MapToUsuario());
+            var usuario = request.MapToUsuario();
+
+            //inserir o usuário
+            var usuarioId = _usuarioRepository.Inserir(usuario);
 
             if (!usuarioId.HasValue)
             {
-                result.MensagemErro = "Erro ao inserir o usuário.";
+                result.MensagemErro = "Erro ao inserir o usuário";
                 return result;
             }
 
-            _alunoRepository.Inserir(request.MapToAlunoR(usuarioId.Value));
+            var aluno = request.MapToAluno(usuarioId.Value);
+
+            //inserir o aluno
+            var alunoId = _alunoRepository.Inserir(aluno);
+
+            if (!alunoId.HasValue)
+            {
+                result.MensagemErro = "Erro ao inserir o aluno";
+                return result;
+            }
 
             result.Sucesso = true;
+
             return result;
         }
 
@@ -51,7 +93,8 @@ namespace SistemaEscolar.Services
 
             if (usuarioExistente != null && usuarioExistente.Id != request.UsuarioId)
             {
-                result.MensagemErro = "Já existe outro usuário com este login.";
+                result.MensagemErro = "Já existe outro usuário com esse login";
+
                 return result;
             }
 
@@ -61,7 +104,7 @@ namespace SistemaEscolar.Services
 
             if (affectedRows == 0)
             {
-                result.MensagemErro = "Não foi possível atualizar o aluno.";
+                result.MensagemErro = "Não foi possível atualizar o aluno";
                 return result;
             }
 
@@ -71,11 +114,12 @@ namespace SistemaEscolar.Services
 
             if (affectedRows == 0)
             {
-                result.MensagemErro = "Não foi possível atualizar o usuário.";
+                result.MensagemErro = "Não foi possível atualizar o usuário";
                 return result;
             }
 
             result.Sucesso = true;
+
             return result;
         }
 
@@ -87,7 +131,8 @@ namespace SistemaEscolar.Services
 
             if (aluno == null)
             {
-                result.MensagemErro = "Aluno não existe.";
+                result.MensagemErro = "Aluno não existe";
+
                 return result;
             }
 
@@ -95,7 +140,8 @@ namespace SistemaEscolar.Services
 
             if (affectedRows == 0)
             {
-                result.MensagemErro = "Não foi possível excluir o aluno.";
+                result.MensagemErro = "Não foi possível excluir o aluno";
+
                 return result;
             }
 
@@ -103,26 +149,74 @@ namespace SistemaEscolar.Services
 
             if (affectedRows == 0)
             {
-                result.MensagemErro = "Não foi possível excluir o usuário associado.";
+                result.MensagemErro = "Não foi possível excluir o usuário";
+
                 return result;
             }
 
             result.Sucesso = true;
+
             return result;
         }
 
         public IList<AlunoResult> Listar()
         {
             var alunos = _alunoRepository.Listar();
-            var result = alunos.Select(a => a.MapToAlunoResult()).ToList();
+
+            var result = alunos.Select(c => c.MapToAlunoResult()).ToList();
+
+            return result;
+        }
+
+        public IList<AlunoResult> ListarPorTurma(int turmaId)
+        {
+            var alunos = _alunoRepository.ListarPorTurma(turmaId);
+
+            var result = alunos.Select(c => c.MapToAlunoResult()).ToList();
+
+            return result;
+        }
+
+        public IList<AlunoResult> ListarPorProfessor(int usuarioId)
+        {
+            var alunos = _alunoRepository.ListarPorProfessor(usuarioId);
+
+            var result = alunos.Select(c => c.MapToAlunoResult()).ToList();
+
+            return result;
+        }
+
+        public IList<AlunoResult> ListarPorAluno(int usuarioId)
+        {
+            var alunos = _alunoRepository.ListarPorAluno(usuarioId);
+
+            var result = alunos.Select(c => c.MapToAlunoResult()).ToList();
+
             return result;
         }
 
         public AlunoResult? ObterPorId(int id)
         {
             var aluno = _alunoRepository.ObterPorId(id);
-            if (aluno == null) return null;
-            return aluno.MapToAlunoResult();
+
+            if (aluno == null)
+                return null;
+
+            var result = aluno.MapToAlunoResult();
+
+            return result;
+        }
+
+        public AlunoResult? ObterPorUsuarioId(int usuarioId)
+        {
+            var aluno = _alunoRepository.ObterPorUsuarioId(usuarioId);
+
+            if (aluno == null)
+                return null;
+
+            var result = aluno.MapToAlunoResult();
+
+            return result;
         }
     }
 }
