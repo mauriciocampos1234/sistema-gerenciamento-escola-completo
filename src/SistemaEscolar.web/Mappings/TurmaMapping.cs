@@ -9,7 +9,7 @@ namespace SistemaEscolar.web.Mappings
         {
             var request = new CriarTurmaRequest
             {
-                Ano = model.Ano.Value,
+                Ano = model.Ano!.Value,
                 Semestre = model.Semestre,
                 ProfessorId = model.ProfessorId,
                 Periodo = model.Periodo!,
@@ -24,7 +24,7 @@ namespace SistemaEscolar.web.Mappings
             var ViewModel = new ListarViewModel
             {
                 Id = model.Id,
-                SemestreAno = $"{model.Semestre}/{model.Ano}",
+                SemestreAno = $"{model.Semestre}° Semestre/{model.Ano}",
                 Professor = model.ProfessorNome,
                 Nivel = model.Nivel,
                 Periodo = model.Periodo

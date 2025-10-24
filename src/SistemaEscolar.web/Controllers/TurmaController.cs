@@ -24,16 +24,12 @@ namespace SistemaEscolar.Web.Controllers
         [Route("criar")]
         public IActionResult Criar()
         {
-            var model = new CriarViewModel();
-            
-            model.Semestres = new List<SelectListItem>
-                {
-                new SelectListItem { Text = "1º Semestre", Value = "1" },
-                new SelectListItem { Text = "2º Semestre", Value = "2" }
-            };
 
-            model.Professores = _professorService.Listar()
-                .Select(p => new SelectListItem(p.Nome, p.Id.ToString())).ToList();
+            var model = new CriarViewModel();
+
+            model.Semestres = ObterListaSemestres();
+
+            model.Professores = ObterListaProfessores();
 
             return View(model);
         }
@@ -75,7 +71,16 @@ namespace SistemaEscolar.Web.Controllers
         {
             var turma = _turmaService.ObterPorId(id);
 
-            var model = turma?.MapToEditarViewModel();
+            if (turma == null)
+            {
+                return RedirectToAction("Listar");
+            }
+
+            var model = turma.MapToEditarViewModel();
+
+            model.Semestres = ObterListaSemestres();
+
+            model.Professores = ObterListaProfessores();
 
             return View(model);
         }
@@ -117,6 +122,21 @@ namespace SistemaEscolar.Web.Controllers
             }
 
             return RedirectToAction("Listar");
+        }
+
+        private List<SelectListItem> ObterListaSemestres()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Text = "1º Semestre", Value = "1" },
+                new SelectListItem { Text = "2º Semestre", Value = "2" }
+            };
+        }
+
+        private List<SelectListItem> ObterListaProfessores()
+        {
+            return _professorService.Listar()
+                .Select(p => new SelectListItem(p.Nome, p.Id.ToString())).ToList();
         }
     }
 }

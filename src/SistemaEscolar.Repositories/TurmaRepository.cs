@@ -55,12 +55,12 @@ namespace SistemaEscolar.Repositories
                 var query = "UPDATE turma SET ano = @ano, semestre = @semestre, periodo = @periodo, nivel = @nivel, professor_id = @professor_id WHERE turma_id = @turma_id";
 
                 var cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@ano", turma.Ano);
+                cmd.Parameters.AddWithValue("@turma_id", turma.Id);
                 cmd.Parameters.AddWithValue("@semestre", turma.Semestre);
+                cmd.Parameters.AddWithValue("@ano", turma.Ano);
                 cmd.Parameters.AddWithValue("@periodo", turma.Periodo);
                 cmd.Parameters.AddWithValue("@nivel", turma.Nivel);
                 cmd.Parameters.AddWithValue("@professor_id", turma.ProfessorId);
-                cmd.Parameters.AddWithValue("@turma_id", turma.Id);
 
                 conn.Open();
 
