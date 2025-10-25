@@ -1,6 +1,8 @@
-﻿@model IList<SistemaEscolar.web.Models.Turma.ListarViewModel>
+﻿@using SistemaEscolar.web.Models.Menu
+@model IList<SistemaEscolar.web.Models.Turma.ListarViewModel>
 @{
     ViewData["Title"] = "Listar Turmas";
+    ViewData["Menu"] = Menu.Turma;
 }
 
 <h1 class="py-4">Lista de Turmas</h1>
