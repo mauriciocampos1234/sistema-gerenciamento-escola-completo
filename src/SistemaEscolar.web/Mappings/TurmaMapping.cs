@@ -41,7 +41,8 @@ namespace SistemaEscolar.web.Mappings
                 Semestre = model.Semestre,
                 ProfessorId = model.ProfessorId,
                 Nivel = model.Nivel,
-                Periodo = model.Periodo
+                Periodo = model.Periodo,
+                AlunosTurma = new List<EditarViewModel.AlunoTurmaViewModel>() // Adicionado para corrigir CS9035
             };
 
             return viewModel;

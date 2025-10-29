@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Models\Aluno\" />
     <Folder Include="Models\Professor\" />
-    <Folder Include="Models\Turma\" />
   </ItemGroup>
 
 </Project>

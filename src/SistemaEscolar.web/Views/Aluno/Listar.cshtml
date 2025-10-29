@@ -1,7 +1,7 @@
 ﻿@using SistemaEscolar.web.Models.Menu
 @model IList<SistemaEscolar.web.Models.Aluno.ListarViewModel>
 @{
-    ViewData["Title"] = "Listar Aluno";
+    ViewData["Title"] = "Listar Alunos";
     ViewData["Menu"] = Menu.Aluno;
 }
 
@@ -26,17 +26,17 @@
         </thead>
 
         <tbody>
-            @foreach (var professor in Model) // Percorre a lista de professores
+            @foreach (var aluno in Model) // Percorre a lista de alunos
             {
                 <tr>
-                    <td>@professor.Id</td>
-                    <td>@professor.Nome</td>
-                    <td>@professor.Email</td>
-                    <td>@professor.Login</td>
+                    <td>@aluno.Id</td>
+                    <td>@aluno.Nome</td>
+                    <td>@aluno.Email</td>
+                    <td>@aluno.Login</td>
 
                     <td>
                         <a class="link-underline link-underline-opacity-0"
-                           asp-controller="Aluno" asp-action="Editar" asp-route-id="@professor.Id">
+                           asp-controller="Aluno" asp-action="Editar" asp-route-id="@aluno.Id">
                             Editar
                         </a>
                     </td>

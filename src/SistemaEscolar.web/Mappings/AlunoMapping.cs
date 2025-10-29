@@ -1,56 +1,74 @@
 ﻿using SistemaEscolar.Services.Models.Aluno;
 using SistemaEscolar.web.Models.Aluno;
 
+
+
 namespace SistemaEscolar.web.Mappings
 {
     public static class AlunoMapping
     {
         public static CriarAlunoRequest MapToCriarAlunoRequest(this CriarViewModel model)
         {
-            return new CriarAlunoRequest
+            var request = new CriarAlunoRequest
             {
-                Login = model.Login,
-                Senha = model.Senha,
-                Nome = model.Nome,
-                Email = model.Email
+                Login = model.Login!,
+                Senha = model.Senha!,
+                Nome = model.Nome!,
+                Email = model.Email!
             };
-        }
-
-        public static EditarAlunoRequest MapToEditarAlunoRequest(this EditarViewModel model)
-        {
-            return new EditarAlunoRequest
-            {
-                Id = model.Id,
-                UsuarioId = model.UsuarioId,
-                Login = model.Login,
-                Senha = model.Senha,
-                Nome = model.Nome,
-                Email = model.Email
-            };
+            return request;
         }
 
         public static ListarViewModel MapToListarViewModel(this AlunoResult model)
         {
-            return new ListarViewModel
+            var viewModel = new ListarViewModel
             {
                 Id = model.Id,
                 Nome = model.Nome,
                 Email = model.Email,
-                Login = model.Login
+                Login = model.Login!
             };
+            return viewModel;
+        }
+
+        public static Models.Turma.EditarViewModel.AlunoTurmaViewModel MapToAlunoTurmaViewModel(this AlunoResult model)
+        {
+            var viewModel = new Models.Turma.EditarViewModel.AlunoTurmaViewModel
+            {
+                Id = model.Id,
+                Nome = model.Nome,
+                Email = model.Email,
+                Login = model.Login!
+            };
+            return viewModel;
         }
 
         public static EditarViewModel MapToEditarViewModel(this AlunoResult model)
         {
-            return new EditarViewModel
+            var viewModel = new EditarViewModel
             {
                 Id = model.Id,
                 UsuarioId = model.UsuarioId,
-                Nome = model.Nome,
-                Email = model.Email,
-                Login = model.Login ?? string.Empty,
-                Senha = model.Senha ?? string.Empty
+                Nome = model.Nome!,
+                Email = model.Email!,
+                Login = model.Login!,
+                Senha = model.Senha!
             };
+            return viewModel;
+        }
+
+        public static EditarAlunoRequest MapToEditarAlunoRequest(this EditarViewModel model)
+        {
+            var request = new EditarAlunoRequest
+            {
+                Id = model.Id,
+                UsuarioId = model.UsuarioId,
+                Login = model.Login,
+                Senha = model.Senha,
+                Nome = model.Nome,
+                Email = model.Email!
+            };
+            return request;
         }
     }
 }

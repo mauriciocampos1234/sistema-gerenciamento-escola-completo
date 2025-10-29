@@ -1,8 +1,5 @@
 ﻿using SistemaEscolar.Repositories;
-using SistemaEscolar.Services.Enums;
 using SistemaEscolar.Services.Mappings;
-using SistemaEscolar.Services.Models.Aluno;
-using SistemaEscolar.Repositories;
 using SistemaEscolar.Services.Models.Aluno;
 
 namespace SistemaEscolar.Services

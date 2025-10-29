@@ -1,4 +1,5 @@
 ﻿using SistemaEscolar.Repositories;
+using SistemaEscolar.Repositories.Entities;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Turma;
 
@@ -9,7 +10,9 @@ namespace SistemaEscolar.Services
         CriarTurmaResult Criar(CriarTurmaRequest request);
 
         EditarTurmaResult Editar(EditarTurmaRequest request);
-        
+
+        AssociarAlunoTurmaResult AssociarAlunoTurma(int alunoId, int turmaId);
+
         ExcluirTurmaResult Excluir(int id);
 
         IList<TurmaResult> Listar();
@@ -20,10 +23,15 @@ namespace SistemaEscolar.Services
     public class TurmaService : ITurmaService
     {
         private readonly ITurmaRepository _turmaRepository;
+        private readonly IAlunoTurmaBoletimRepository _alunoTurmaBoletimRepository;
 
-        public TurmaService(ITurmaRepository turmaRepository)
+        public TurmaService(
+            ITurmaRepository turmaRepository,
+            IAlunoTurmaBoletimRepository alunoTurmaBoletimRepository
+            )
         {
             _turmaRepository = turmaRepository;
+            _alunoTurmaBoletimRepository = alunoTurmaBoletimRepository;
         }
 
         public CriarTurmaResult Criar(CriarTurmaRequest request)
@@ -61,6 +69,37 @@ namespace SistemaEscolar.Services
 
             result.Sucesso = true;
 
+            return result;
+        }
+
+        public AssociarAlunoTurmaResult AssociarAlunoTurma(int alunoId, int turmaId)
+        {
+            var result = new AssociarAlunoTurmaResult();
+
+            var alunoTurmaBoletim = new AlunoTurmaBoletim
+            {
+                AlunoId = alunoId,
+                TurmaId = turmaId,
+                NotaBim1Escrita = null,
+                NotaBim1Leitura = null,
+                NotaBim1Conversacao = null,
+                NotaBim1Final = null,
+                NotaBim2Escrita = null,
+                NotaBim2Leitura = null,
+                NotaBim2Conversacao = null,
+                NotaBim2Final = null,
+                NotaFinalSemestre = null,
+                FaltasSemestre = 0
+            };
+            
+            var affectedRows = _alunoTurmaBoletimRepository.Inserir(alunoTurmaBoletim);
+            
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível associar o aluno à turma";
+                return result;
+            }
+            result.Sucesso = true;
             return result;
         }
 

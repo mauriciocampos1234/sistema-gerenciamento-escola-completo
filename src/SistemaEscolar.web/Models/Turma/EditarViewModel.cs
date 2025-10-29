@@ -23,5 +23,21 @@ namespace SistemaEscolar.web.Models.Turma
         public List<SelectListItem>? Niveis { get; set; }
 
         public List<SelectListItem>? Semestres { get; set; } // Adiciona a propriedade faltante
+
+        public IList<AlunoTurmaViewModel>? Alunos { get; set; } // Lista de alunos disponíveis para adicionar à turma
+
+        //Model add alunos da turma
+        public required IList<AlunoTurmaViewModel> AlunosTurma { get; set; }
+
+        public class AlunoTurmaViewModel
+        {
+            public int Id { get; set; }
+
+            public required string Nome { get; set; }
+
+            public required string Email { get; set; }
+
+            public required string Login { get; set; }
+        }
     }
 }

@@ -1,12 +1,5 @@
 ﻿using SistemaEscolar.Repositories.Entities;
 using MySql.Data.MySqlClient;
-using SistemaEscolar.Repositories;
-using SistemaEscolar.Repositories.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SistemaEscolar.Repositories
 {
