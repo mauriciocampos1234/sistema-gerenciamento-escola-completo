@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public int AlunoId { get; set; }
+        public int? AlunoId { get; set; }
 
-        public int TurmaId { get; set; }
+        public int? TurmaId { get; set; }
 
         public decimal? NotaBim1Escrita { get; set; }
 
@@ -26,6 +26,6 @@
 
         public decimal? NotaFinalSemestre { get; set; }
 
-        public int FaltasSemestre { get; set; }
+        public int? FaltasSemestre { get; set; }
     }
 }

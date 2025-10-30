@@ -13,6 +13,8 @@ namespace SistemaEscolar.Services
 
         AssociarAlunoTurmaResult AssociarAlunoTurma(int alunoId, int turmaId);
 
+        AssociarAlunoTurmaResult DesassociarAlunoTurma(int alunoId, int turmaId);
+
         ExcluirTurmaResult Excluir(int id);
 
         IList<TurmaResult> Listar();
@@ -79,24 +81,45 @@ namespace SistemaEscolar.Services
             var alunoTurmaBoletim = new AlunoTurmaBoletim
             {
                 AlunoId = alunoId,
-                TurmaId = turmaId,
-                NotaBim1Escrita = null,
-                NotaBim1Leitura = null,
-                NotaBim1Conversacao = null,
-                NotaBim1Final = null,
-                NotaBim2Escrita = null,
-                NotaBim2Leitura = null,
-                NotaBim2Conversacao = null,
-                NotaBim2Final = null,
-                NotaFinalSemestre = null,
-                FaltasSemestre = 0
+                TurmaId = turmaId
             };
-            
+
+            var alunoTurma = _alunoTurmaBoletimRepository.ObterPorAlunoTurma(alunoId, turmaId);
+
+            if (alunoTurma != null)
+            {
+                result.MensagemErro = "Aluno já está associado a essa turma";
+                return result;
+            }
+
             var affectedRows = _alunoTurmaBoletimRepository.Inserir(alunoTurmaBoletim);
             
             if (affectedRows == 0)
             {
                 result.MensagemErro = "Não foi possível associar o aluno à turma";
+                return result;
+            }
+            result.Sucesso = true;
+            return result;
+        }
+
+        public AssociarAlunoTurmaResult DesassociarAlunoTurma(int alunoId, int turmaId)
+        {
+            var result = new AssociarAlunoTurmaResult();
+
+            var alunoTurma = _alunoTurmaBoletimRepository.ObterPorAlunoTurma(alunoId, turmaId);
+
+            if (alunoTurma == null)
+            {
+                result.MensagemErro = "Aluno não está associado a essa turma";
+                return result;
+            }
+
+            var affectedRows = _alunoTurmaBoletimRepository.Apagar(alunoId, turmaId);
+
+            if (affectedRows == 0)
+            {
+                result.MensagemErro = "Não foi possível desassociar o aluno à turma";
                 return result;
             }
             result.Sucesso = true;
