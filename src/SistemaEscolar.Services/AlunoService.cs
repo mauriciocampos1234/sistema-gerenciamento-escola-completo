@@ -23,6 +23,7 @@ namespace SistemaEscolar.Services
         AlunoResult? ObterPorId(int id);
 
         AlunoResult? ObterPorUsuarioId(int usuarioId);
+        IList<AlunoResult>? ListarPorProfessor(string usuarioId);
     }
 
     public class AlunoService : IAlunoService
@@ -214,6 +215,17 @@ namespace SistemaEscolar.Services
             var result = aluno.MapToAlunoResult();
 
             return result;
+        }
+
+        public IList<AlunoResult>? ListarPorProfessor(string usuarioId)
+        {
+            if (int.TryParse(usuarioId, out int id))
+            {
+                var alunos = _alunoRepository.ListarPorProfessor(id);
+                var result = alunos.Select(c => c.MapToAlunoResult()).ToList();
+                return result;
+            }
+            return null;
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using SistemaEscolar.Repositories;
-using SistemaEscolar.Services.Enums;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Usuario;
-using SistemaEscolar.Repositories;
-using SistemaEscolar.Services.Models.Usuario;
+
 
 namespace SistemaEscolar.Services
 {

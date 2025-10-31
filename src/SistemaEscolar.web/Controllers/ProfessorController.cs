@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization; //ok
-using Microsoft.AspNetCore.Mvc; //ok
-using SistemaEscolar.Services; //ok
-using SistemaEscolar.Services.Models.Professor; //ok
-using SistemaEscolar.web.Mappings; //ok
-using SistemaEscolar.web.Models.Professor; //ok
+﻿using Microsoft.AspNetCore.Authorization; 
+using Microsoft.AspNetCore.Mvc; 
+using SistemaEscolar.Services; 
+using SistemaEscolar.web.Mappings; 
+using SistemaEscolar.web.Models.Professor; 
 
 
 namespace SistemaEscolar.Web.Controllers

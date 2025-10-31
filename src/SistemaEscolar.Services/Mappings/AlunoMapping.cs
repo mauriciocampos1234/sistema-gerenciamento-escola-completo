@@ -1,13 +1,5 @@
 ﻿using SistemaEscolar.Repositories.Entities;
 using SistemaEscolar.Services.Models.Aluno;
-using SistemaEscolar.Repositories.Entities;
-using SistemaEscolar.Services.Models.Aluno;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SistemaEscolar.Services.Mappings
 {

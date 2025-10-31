@@ -1,9 +1,9 @@
 ﻿using SistemaEscolar.Services;
-using SistemaEscolar.Services.Models.Aluno;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaEscolar.web.Models.Aluno;
 using SistemaEscolar.web.Mappings;
+using SistemaEscolar.Services.Models.Aluno;
 
 namespace SistemaEscolar.Web.Controllers
 {
@@ -19,6 +19,7 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Criar()
         {
             return View();
@@ -26,6 +27,7 @@ namespace SistemaEscolar.Web.Controllers
 
         [HttpPost]
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Criar(CriarViewModel model)
         {
             if (!ModelState.IsValid)
@@ -49,14 +51,32 @@ namespace SistemaEscolar.Web.Controllers
         [Route("listar")]
         public IActionResult Listar()
         {
-            var alunoes = _alunoService.Listar();
+            IList<AlunoResult>? alunos = null;
 
-            var result = alunoes.Select(c => c.MapToListarViewModel()).ToList();
+            if (User.IsInRole("Administrador"))
+            {
+                alunos = _alunoService.Listar();
+            }
+            else if (User.IsInRole("Professor"))
+            {
+                var usuarioId = Convert.ToInt32(User.FindFirst("Id")?.Value);
 
-            return View(result);
+                alunos = _alunoService.ListarPorProfessor(usuarioId);
+            }
+
+
+            var model = new ListarViewModel
+            {
+                Alunos = alunos.Select(c => c.MapToAlunoViewModel()).ToList(),
+                ExibirBotoesEdicao = User.IsInRole("Administrador")
+
+            };
+
+            return View(model);
         }
 
         [Route("editar/{id}")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Editar(int id)
         {
             var aluno = _alunoService.ObterPorId(id);
@@ -67,6 +87,7 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [Route("editar/{id}")]
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public IActionResult Editar(EditarViewModel model)
         {
@@ -90,6 +111,7 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [Route("excluir/{id}")]
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public IActionResult Excluir(EditarViewModel model)
         {

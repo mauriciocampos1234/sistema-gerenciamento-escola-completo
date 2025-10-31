@@ -19,9 +19,9 @@ namespace SistemaEscolar.web.Mappings
             return request;
         }
 
-        public static ListarViewModel MapToListarViewModel(this AlunoResult model)
+        public static AlunoViewModel MapToAlunoViewModel(this AlunoResult model)
         {
-            var viewModel = new ListarViewModel
+            var viewModel = new AlunoViewModel
             {
                 Id = model.Id,
                 Nome = model.Nome,
