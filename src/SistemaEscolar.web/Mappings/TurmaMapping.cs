@@ -19,9 +19,9 @@ namespace SistemaEscolar.web.Mappings
             return request;
         }
 
-        public static ListarViewModel MapToListarViewModel(this TurmaResult model)
+        public static TurmaViewModel MapToTurmaViewModel(this TurmaResult model)
         {
-            var ViewModel = new ListarViewModel
+            var ViewModel = new TurmaViewModel
             {
                 Id = model.Id,
                 SemestreAno = $"{model.Semestre}° Semestre/{model.Ano}",

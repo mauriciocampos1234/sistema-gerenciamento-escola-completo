@@ -19,6 +19,8 @@ namespace SistemaEscolar.Services
 
         IList<TurmaResult> Listar();
 
+        IList<TurmaResult> ListarPorProfessor(int usuarioId);
+
         TurmaResult? ObterPorId(int id);
     }
 
@@ -93,7 +95,7 @@ namespace SistemaEscolar.Services
             }
 
             var affectedRows = _alunoTurmaBoletimRepository.Inserir(alunoTurmaBoletim);
-            
+
             if (affectedRows == 0)
             {
                 result.MensagemErro = "Não foi possível associar o aluno à turma";
@@ -162,6 +164,15 @@ namespace SistemaEscolar.Services
             return result;
         }
 
+        public IList<TurmaResult> ListarPorProfessor(int usuarioId)
+        {
+            var turmas = _turmaRepository.ListarPorProfessor(usuarioId);
+
+            var result = turmas.Select(c => c.MapToTurmaResult()).ToList();
+
+            return result;
+        }
+
         public TurmaResult? ObterPorId(int id)
         {
             var turma = _turmaRepository.ObterPorId(id);
@@ -173,5 +184,6 @@ namespace SistemaEscolar.Services
 
             return result;
         }
+
     }
 }

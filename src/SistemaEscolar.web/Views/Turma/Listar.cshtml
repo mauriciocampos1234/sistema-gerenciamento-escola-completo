@@ -1,5 +1,6 @@
 ﻿@using SistemaEscolar.web.Models.Menu
-@model IList<SistemaEscolar.web.Models.Turma.ListarViewModel>
+@using SistemaEscolar.web.Models.Turma
+@model ListarViewModel;
 @{
     ViewData["Title"] = "Listar Turmas";
     ViewData["Menu"] = Menu.Turma;
@@ -7,46 +8,59 @@
 
 <h1 class="py-4">Lista de Turmas</h1>
 
-<div class="d-flex py-2">
-    <a class="btn btn-primary" asp-controller="Turma" asp-action="Criar">
-        Adicionar Turma
-    </a>
-</div>
+@if (Model.ExibirBotaoInserir)
+{
+    <div class="d-flex py-2">
+        <a class="btn btn-primary" asp-controller="Turma" asp-action="Criar">
+            Adicionar Turma
+        </a>
+    </div>
 
-<div class="table-responsive d-flex py-2">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Semestre/Ano</th>
-                <th scope="col">Professor(a)</th>
-                <th scope="col">Período</th>
-                <th scope="col">Nível</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            @foreach (var turma in Model) // Percorre a lista de turma
-            {
+}
+
+@if (Model.Turmas == null || Model.Turmas.Count == 0)
+{
+    <p class="card-text">Nenhuma turma cadastrada.</p>
+}
+else
+{
+    <div class="table-responsive d-flex py-2">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@turma.Id</td>
-                    <td>@turma.SemestreAno</td>
-                    <td>@turma.Professor</td>
-                    <td>@turma.Periodo</td>
-                    <td>@turma.Nivel</td>
-
-                    <td>
-                        <a class="link-underline link-underline-opacity-0" 
-                        asp-controller="Turma" asp-action="Editar" asp-route-id="@turma.Id">
-                        Editar
-                        </a>
-                    </td>
+                    <th scope="col">Id</th>
+                    <th scope="col">Semestre/Ano</th>
+                    <th scope="col">Professor(a)</th>
+                    <th scope="col">Período</th>
+                    <th scope="col">Nível</th>
+                    <th scope="col"></th>
                 </tr>
-            }
+            </thead>
 
-           
-        </tbody>
-    
-    </table>
-</div>
+            <tbody>
+                @foreach (var turma in Model.Turmas) // Percorre a lista de turma
+                {
+                    <tr>
+                        <td>@turma.Id</td>
+                        <td>@turma.SemestreAno</td>
+                        <td>@turma.Professor</td>
+                        <td>@turma.Periodo</td>
+                        <td>@turma.Nivel</td>
+
+                        <td>
+                            <a class="link-underline link-underline-opacity-0"
+                               asp-controller="Turma" asp-action="Editar" asp-route-id="@turma.Id">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+}
+
+

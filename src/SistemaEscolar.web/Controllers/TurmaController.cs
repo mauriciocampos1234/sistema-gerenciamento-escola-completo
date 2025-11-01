@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SistemaEscolar.web.Mappings;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SistemaEscolar.Services.Models.Turma;
 
 namespace SistemaEscolar.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace SistemaEscolar.Web.Controllers
 
 
         public TurmaController(
-            ITurmaService turmaService, 
+            ITurmaService turmaService,
             IProfessorService professorService,
             IAlunoService alunoService)
         {
@@ -27,6 +28,7 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Criar()
         {
 
@@ -41,6 +43,7 @@ namespace SistemaEscolar.Web.Controllers
 
         [HttpPost]
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Criar(CriarViewModel model)
         {
             if (!ModelState.IsValid)
@@ -64,14 +67,29 @@ namespace SistemaEscolar.Web.Controllers
         [Route("listar")]
         public IActionResult Listar()
         {
-            var turmas = _turmaService.Listar();
+            IList<TurmaResult>? turmas = null;
 
-            var result = turmas.Select(c => c.MapToListarViewModel()).ToList();
+            if (User.IsInRole("Administrador"))
+            {
+                turmas = _turmaService.Listar();
+            }
+            else if (User.IsInRole("Professor"))
+            {
+                var usuarioId = Convert.ToInt32(User.FindFirst("Id")?.Value);
+                turmas = _turmaService.ListarPorProfessor(usuarioId);
+            }
+
+            var result = new ListarViewModel
+            {
+                Turmas = turmas?.Select(c => c.MapToTurmaViewModel()).ToList(),
+                ExibirBotaoInserir = User.IsInRole("Administrador")
+            };
 
             return View(result);
         }
 
         [Route("editar/{id}")]
+        //[Authorize(Roles = "Administrador")]
         public IActionResult Editar(int id)
         {
             var turma = _turmaService.ObterPorId(id);
@@ -93,11 +111,14 @@ namespace SistemaEscolar.Web.Controllers
 
             model.Professores = ObterListaProfessores();
 
+            model.PodeEditarApagarTurma = User.IsInRole("Administrador");
+
             return View(model);
         }
 
         [Route("editar/{id}")]
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Editar(EditarViewModel model)
         {
             if (!ModelState.IsValid)
@@ -121,6 +142,7 @@ namespace SistemaEscolar.Web.Controllers
 
         [HttpPost]
         [Route("associarAlunos")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult AssociarAlunos(int turmaId)
         {
             foreach (var formItem in Request.Form)
@@ -137,6 +159,7 @@ namespace SistemaEscolar.Web.Controllers
 
         [HttpPost]
         [Route("desassociarAluno")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult DesassociarAluno(int alunoId, int turmaId)
         {
             _turmaService.DesassociarAlunoTurma(alunoId, turmaId);
@@ -145,6 +168,7 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [Route("excluir/{id}")]
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public IActionResult Excluir(EditarViewModel model)
         {
@@ -176,3 +200,6 @@ namespace SistemaEscolar.Web.Controllers
         }
     }
 }
+
+
+

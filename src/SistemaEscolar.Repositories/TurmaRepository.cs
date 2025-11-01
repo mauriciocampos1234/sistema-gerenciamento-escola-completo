@@ -13,6 +13,8 @@ namespace SistemaEscolar.Repositories
 
         IList<Turma> Listar();
 
+        IList<Turma> ListarPorProfessor(int usuarioId);
+
         Turma? ObterPorId(int id);
     }
 
@@ -61,6 +63,21 @@ namespace SistemaEscolar.Repositories
                 cmd.Parameters.AddWithValue("@periodo", turma.Periodo);
                 cmd.Parameters.AddWithValue("@nivel", turma.Nivel);
                 cmd.Parameters.AddWithValue("@professor_id", turma.ProfessorId);
+
+                conn.Open();
+
+                return cmd.ExecuteNonQuery();
+            }
+        }
+
+        public int? Apagar(int id)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = "DELETE FROM turma WHERE turma_id = @turma_id";
+
+                var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@turma_id", id);
 
                 conn.Open();
 
@@ -204,19 +221,5 @@ namespace SistemaEscolar.Repositories
             return result;
         }
 
-        public int? Apagar(int id)
-        {
-            using (var conn = new MySqlConnection(ConnectionString))
-            {
-                string query = "DELETE FROM turma WHERE turma_id = @turma_id";
-
-                var cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@turma_id", id);
-
-                conn.Open();
-
-                return cmd.ExecuteNonQuery();
-            }
-        }
     }
 }

@@ -29,6 +29,8 @@ namespace SistemaEscolar.web.Models.Turma
         //Model add alunos da turma
         public required IList<AlunoTurmaViewModel> AlunosTurma { get; set; }
 
+        public bool PodeEditarApagarTurma { get; set; }
+
         public class AlunoTurmaViewModel
         {
             public int Id { get; set; }
