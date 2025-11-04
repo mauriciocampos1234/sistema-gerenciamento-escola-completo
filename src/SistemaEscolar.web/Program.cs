@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
 using SistemaEscolar.Repositories;
 using SistemaEscolar.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,7 @@ builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IAlunoService, AlunoService>();
 builder.Services.AddScoped<ITurmaService, TurmaService>();
 
-var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString"); 
+var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString");
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
 builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
@@ -34,20 +36,24 @@ builder.Services.AddScoped<IAlunoTurmaBoletimRepository, AlunoTurmaBoletimReposi
 
 var app = builder.Build();
 
-// Usando pagina de erro personalizada mesmo em ambiente de desenvolvimento
-app.UseExceptionHandler("/Erro/Index"); //Agora voltamos ele para o escopo do IF
 
-// Configure o pipeline de solicitação HTTP.
-//Significado do if: Se não for ambiente de desenvolvimento, vamos usa uma tela de erro customizada (Ambiente de produção)
+app.UseExceptionHandler("/Erro/Index");
+
+
 if (!app.Environment.IsDevelopment())
 {
-    // Agora ele vai usar a tela de erro  dele mesmo, do próprio ASP.NET, quando estiver em desenvolvimento
-    //app.UseExceptionHandler("/Erro/Index");
-    // O valor padrão do HSTS é 30 dias. Você pode querer alterar isso para cenários de produção, consulte https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("pt-BR"),
+    SupportedCultures = new List<CultureInfo> { new CultureInfo("pt-BR") },
+    SupportedUICultures = new List<CultureInfo> { new CultureInfo("pt-BR") }
+});
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
