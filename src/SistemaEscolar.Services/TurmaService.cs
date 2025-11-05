@@ -1,4 +1,5 @@
-﻿using SistemaEscolar.Repositories;
+﻿using EnglishNow.Repositories;
+using SistemaEscolar.Repositories;
 using SistemaEscolar.Repositories.Entities;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Turma;
@@ -31,8 +32,10 @@ namespace SistemaEscolar.Services
 
         public TurmaService(
             ITurmaRepository turmaRepository,
-            IAlunoTurmaBoletimRepository alunoTurmaBoletimRepository
-            )
+            IAlunoTurmaBoletimRepository alunoTurmaBoletimRepository)
+
+
+
         {
             _turmaRepository = turmaRepository;
             _alunoTurmaBoletimRepository = alunoTurmaBoletimRepository;

@@ -1,3 +1,5 @@
+using EnglishNow.Repositories;
+using EnglishNow.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using SistemaEscolar.Repositories;
@@ -24,6 +26,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IAlunoService, AlunoService>();
 builder.Services.AddScoped<ITurmaService, TurmaService>();
+builder.Services.AddScoped<IBoletimService, BoletimService>();
 
 var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString");
 

@@ -1,7 +1,8 @@
-﻿using SistemaEscolar.Repositories.Entities;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
+using SistemaEscolar.Repositories;
+using SistemaEscolar.Repositories.Entities;
 
-namespace SistemaEscolar.Repositories
+namespace EnglishNow.Repositories
 {
     public interface IAlunoTurmaBoletimRepository
     {
@@ -9,12 +10,15 @@ namespace SistemaEscolar.Repositories
 
         int? Apagar(int alunoId, int turmaId);
 
+        int? Atualizar(AlunoTurmaBoletim alunoTurmaBoletim);
+
         AlunoTurmaBoletim? ObterPorAlunoTurma(int alunoId, int turmaId);
     }
 
     public class AlunoTurmaBoletimRepository : BaseRepository, IAlunoTurmaBoletimRepository
     {
         public AlunoTurmaBoletimRepository(string connectionString) : base(connectionString) { }
+
         public int? Inserir(AlunoTurmaBoletim alunoTurmaBoletim)
         {
             int? alunoTurmaBoletimId = null;
@@ -80,15 +84,15 @@ namespace SistemaEscolar.Repositories
 
             using (var conn = new MySqlConnection(ConnectionString))
             {
-                string query = "DELETE FROM aluno_turma_boletim WHERE aluno_id = @aluno_id AND turma_id = @turma_id"; 
-                
+                string query = "DELETE FROM aluno_turma_boletim WHERE aluno_id = @aluno_id AND turma_id = @turma_id";
+
                 var cmd = new MySqlCommand(query, conn);
-                
+
                 cmd.Parameters.AddWithValue("@aluno_id", alunoId);
                 cmd.Parameters.AddWithValue("@turma_id", turmaId);
-                
+
                 conn.Open();
-                
+
                 affectedRows = cmd.ExecuteNonQuery();
             }
 
@@ -101,34 +105,39 @@ namespace SistemaEscolar.Repositories
 
             using (var conn = new MySqlConnection(ConnectionString))
             {
-                string query = @"SELECT
-                                        aluno_turma_boletim_id,
-                                        nota_bim1_escrita,
-                                        nota_bim1_leitura,
-                                        nota_bim1_conversacao,
-                                        nota_bim1_final,
-                                        nota_bim2_leitura,
-                                        nota_bim2_escrita,
-                                        nota_bim2_conversacao,
-                                        nota_bim2_final,
-                                        nota_final_semestre,
-                                        faltas_semestre,
-                                        aluno_id,
-                                        turma_id
-                                        
-                                        FROM 
-                                        aluno_turma_boletim
-                                        
-                                        WHERE 
-                                        aluno_id = @aluno_id AND turma_id = @turma_id";
-                
+                string query = @"SELECT 
+		            atb.aluno_turma_boletim_id,
+		            atb.nota_bim1_escrita,
+		            atb.nota_bim1_leitura,
+		            atb.nota_bim1_conversacao,
+		            atb.nota_bim1_final,
+		            atb.nota_bim2_leitura,
+		            atb.nota_bim2_escrita,
+		            atb.nota_bim2_conversacao,
+		            atb.nota_bim2_final,
+		            atb.nota_final_semestre,
+		            atb.faltas_semestre,
+		            atb.aluno_id,
+		            atb.turma_id,
+                    a.nome,
+                    a.email,
+                    t.ano,
+                    t.semestre,
+                    t.periodo,
+                    t.nivel
+		            FROM aluno_turma_boletim atb
+                    INNER JOIN aluno a ON atb.aluno_id = a.aluno_id
+		            INNER JOIN turma t ON atb.turma_id = t.turma_id
+		            WHERE
+		            atb.aluno_id = @aluno_id AND atb.turma_id = @turma_id";
+
                 var cmd = new MySqlCommand(query, conn);
-                
+
                 cmd.Parameters.AddWithValue("@aluno_id", alunoId);
                 cmd.Parameters.AddWithValue("@turma_id", turmaId);
-                
+
                 conn.Open();
-                
+
                 using (var reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -140,23 +149,77 @@ namespace SistemaEscolar.Repositories
                             NotaBim1Leitura = reader.GetDecimalOrNull("nota_bim1_leitura"),
                             NotaBim1Conversacao = reader.GetDecimalOrNull("nota_bim1_conversacao"),
                             NotaBim1Final = reader.GetDecimalOrNull("nota_bim1_final"),
-                            NotaBim2Escrita = reader.GetDecimalOrNull("nota_bim2_escrita"),
                             NotaBim2Leitura = reader.GetDecimalOrNull("nota_bim2_leitura"),
+                            NotaBim2Escrita = reader.GetDecimalOrNull("nota_bim2_escrita"),
                             NotaBim2Conversacao = reader.GetDecimalOrNull("nota_bim2_conversacao"),
                             NotaBim2Final = reader.GetDecimalOrNull("nota_bim2_final"),
                             NotaFinalSemestre = reader.GetDecimalOrNull("nota_final_semestre"),
                             FaltasSemestre = reader.GetInt32OrNull("faltas_semestre"),
-                            AlunoId = reader.GetInt32OrNull("aluno_id"),
-                            TurmaId = reader.GetInt32OrNull("turma_id"),
-
+                            AlunoId = reader.GetInt32("aluno_id"),
+                            TurmaId = reader.GetInt32("turma_id"),
+                            Aluno = new Aluno
+                            {
+                                Id = reader.GetInt32("aluno_id"),
+                                Nome = reader.GetString("nome"),
+                                Email = reader.GetString("email")
+                            },
+                            Turma = new Turma
+                            {
+                                Id = reader.GetInt32("turma_id"),
+                                Ano = reader.GetInt32("ano"),
+                                Semestre = reader.GetInt32("semestre"),
+                                Periodo = reader.GetString("periodo"),
+                                Nivel = reader.GetString("nivel")
+                            }
                         };
                     }
                 }
-
             }
-            
+
             return result;
+        }
+
+        public int? Atualizar(AlunoTurmaBoletim alunoTurmaBoletim)
+        {
+            int? affectedRows = null;
+
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = @"UPDATE aluno_turma_boletim
+                                    SET
+                                    nota_bim1_escrita = @nota_bim1_escrita,
+                                    nota_bim1_leitura = @nota_bim1_leitura,
+                                    nota_bim1_conversacao = @nota_bim1_conversacao,
+                                    nota_bim1_final = @nota_bim1_final,
+                                    nota_bim2_leitura = @nota_bim2_leitura,
+                                    nota_bim2_escrita = @nota_bim2_escrita,
+                                    nota_bim2_conversacao = @nota_bim2_conversacao,
+                                    nota_bim2_final = @nota_bim2_final,
+                                    nota_final_semestre = @nota_final_semestre,
+                                    faltas_semestre = @faltas_semestre
+                                    WHERE aluno_turma_boletim_id = @aluno_turma_boletim_id;";
+
+                var cmd = new MySqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@aluno_turma_boletim_id", alunoTurmaBoletim.Id);
+
+                cmd.Parameters.AddWithValue("@nota_bim1_escrita", alunoTurmaBoletim.NotaBim1Escrita);
+                cmd.Parameters.AddWithValue("@nota_bim1_leitura", alunoTurmaBoletim.NotaBim1Leitura);
+                cmd.Parameters.AddWithValue("@nota_bim1_conversacao", alunoTurmaBoletim.NotaBim1Conversacao);
+                cmd.Parameters.AddWithValue("@nota_bim1_final", alunoTurmaBoletim.NotaBim1Final);
+                cmd.Parameters.AddWithValue("@nota_bim2_leitura", alunoTurmaBoletim.NotaBim2Leitura);
+                cmd.Parameters.AddWithValue("@nota_bim2_escrita", alunoTurmaBoletim.NotaBim2Escrita);
+                cmd.Parameters.AddWithValue("@nota_bim2_conversacao", alunoTurmaBoletim.NotaBim2Conversacao);
+                cmd.Parameters.AddWithValue("@nota_bim2_final", alunoTurmaBoletim.NotaBim2Final);
+                cmd.Parameters.AddWithValue("@nota_final_semestre", alunoTurmaBoletim.NotaFinalSemestre);
+                cmd.Parameters.AddWithValue("@faltas_semestre", alunoTurmaBoletim.FaltasSemestre);
+
+                conn.Open();
+
+                affectedRows = Convert.ToInt32(cmd.ExecuteNonQuery());
+            }
+
+            return affectedRows;
         }
     }
 }
-
