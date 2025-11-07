@@ -1,4 +1,6 @@
-﻿namespace SistemaEscolar.web.Models.Boletim
+﻿using SistemaEscolar.Services.Models.Boletim;
+
+namespace SistemaEscolar.web.Models.Boletim
 {
     public class EditarViewModel
     {
@@ -29,5 +31,23 @@
         public decimal? NotaFinalSemestre { get; set; }
 
         public int? FaltasSemestre { get; set; }
+
+        internal AtualizarBoletimRequest MapToAtualizarBoletimRequest()
+        {
+            return new AtualizarBoletimRequest
+            {
+                BoletimId = BoletimId,
+                NotaBim1Escrita = NotaBim1Escrita,
+                NotaBim1Leitura = NotaBim1Leitura,
+                NotaBim1Conversacao = NotaBim1Conversacao,
+                NotaBim1Final = NotaBim1Final,
+                NotaBim2Escrita = NotaBim2Escrita,
+                NotaBim2Leitura = NotaBim2Leitura,
+                NotaBim2Conversacao = NotaBim2Conversacao,
+                NotaBim2Final = NotaBim2Final,
+                NotaFinalSemestre = NotaFinalSemestre,
+                FaltasSemestre = FaltasSemestre
+            };
+        }
     }
 }

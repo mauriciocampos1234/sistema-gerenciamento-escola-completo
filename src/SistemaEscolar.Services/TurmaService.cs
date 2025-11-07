@@ -1,5 +1,4 @@
-﻿using EnglishNow.Repositories;
-using SistemaEscolar.Repositories;
+﻿using SistemaEscolar.Repositories;
 using SistemaEscolar.Repositories.Entities;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Turma;

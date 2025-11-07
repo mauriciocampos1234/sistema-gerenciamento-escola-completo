@@ -1,16 +1,15 @@
-﻿using EnglishNow.Repositories;
-using EnglishNow.Services.Mappings;
-using EnglishNow.Services.Models.Boletim;
+﻿using SistemaEscolar.Repositories;
+using SistemaEscolar.Services.Mappings;
+using SistemaEscolar.Services.Models.Boletim;
 
 
-
-namespace EnglishNow.Services
+namespace SistemaEscolar.Services
 {
     public interface IBoletimService
     {
         BoletimResult? ObterBoletimPorAlunoTurma(int alunoId, int turmaId);
 
-        //AtualizarBoletimResult Atualizar(AtualizarBoletimRequest request);
+        AtualizarBoletimResult Atualizar(AtualizarBoletimRequest request);
     }
 
     public class BoletimService : IBoletimService
@@ -23,24 +22,24 @@ namespace EnglishNow.Services
         }
 
 
-        //public AtualizarBoletimResult Atualizar(AtualizarBoletimRequest request)
-        //{
-        //var result = new AtualizarBoletimResult();
+        public AtualizarBoletimResult Atualizar(AtualizarBoletimRequest request)
+        {
+            var result = new AtualizarBoletimResult();
 
-        //var alunoTurmaBoletim = request.MapToAlunoTurmaBoletim();
+            var alunoTurmaBoletim = request.MapToAlunoTurmaBoletim();
 
-        //var affectedRows = _alunoTurmaBoletimRepository.Atualizar(alunoTurmaBoletim);
+            var affectedRows = _alunoTurmaBoletimRepository.Atualizar(alunoTurmaBoletim);
 
-        //if (!affectedRows.HasValue || affectedRows.Value == 0)
-        //{
-        //result.MensagemErro = "Erro ao atualizar o boletim.";
-        //return result;
-        //}
+            if (!affectedRows.HasValue || affectedRows.Value == 0)
+            {
+                result.MensagemErro = "Erro ao atualizar o boletim.";
+                return result;
+            }
 
-        //result.Sucesso = true;
+            result.Sucesso = true;
 
-        //return result;
-        //}
+            return result;
+        }
 
         public BoletimResult? ObterBoletimPorAlunoTurma(int alunoId, int turmaId)
         {

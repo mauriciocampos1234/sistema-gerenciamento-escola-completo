@@ -1,9 +1,7 @@
-using EnglishNow.Repositories;
-using EnglishNow.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Localization;
 using SistemaEscolar.Repositories;
 using SistemaEscolar.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);

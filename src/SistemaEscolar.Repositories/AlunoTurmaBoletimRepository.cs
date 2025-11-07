@@ -2,7 +2,7 @@
 using SistemaEscolar.Repositories;
 using SistemaEscolar.Repositories.Entities;
 
-namespace EnglishNow.Repositories
+namespace SistemaEscolar.Repositories
 {
     public interface IAlunoTurmaBoletimRepository
     {

@@ -1,4 +1,4 @@
-﻿using EnglishNow.Services.Models.Boletim;
+﻿using SistemaEscolar.Services.Models.Boletim;
 using SistemaEscolar.web.Models.Boletim;
 
 namespace SistemaEscolar.web.Mappings
@@ -25,6 +25,25 @@ namespace SistemaEscolar.web.Mappings
                 FaltasSemestre = model.FaltasSemestre
             };
             return viewModel;
+        }
+
+        public static AtualizarBoletimRequest AtualizarBoletimRequest(this EditarViewModel model)
+        {
+            var request = new AtualizarBoletimRequest
+            {
+                BoletimId = model.BoletimId,
+                NotaBim1Escrita = model.NotaBim1Escrita,
+                NotaBim1Leitura = model.NotaBim1Leitura,
+                NotaBim1Conversacao = model.NotaBim1Conversacao,
+                NotaBim1Final = model.NotaBim1Final,
+                NotaBim2Escrita = model.NotaBim2Escrita,
+                NotaBim2Leitura = model.NotaBim2Leitura,
+                NotaBim2Conversacao = model.NotaBim2Conversacao,
+                NotaBim2Final = model.NotaBim2Final,
+                NotaFinalSemestre = model.NotaFinalSemestre,
+                FaltasSemestre = model.FaltasSemestre
+            };
+            return request;
         }
     }
 }
