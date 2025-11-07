@@ -31,8 +31,10 @@ namespace SistemaEscolar.Services
 
         public TurmaService(
             ITurmaRepository turmaRepository,
-            IAlunoTurmaBoletimRepository alunoTurmaBoletimRepository
-            )
+            IAlunoTurmaBoletimRepository alunoTurmaBoletimRepository)
+
+
+
         {
             _turmaRepository = turmaRepository;
             _alunoTurmaBoletimRepository = alunoTurmaBoletimRepository;

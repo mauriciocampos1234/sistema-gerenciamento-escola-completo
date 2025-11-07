@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using SistemaEscolar.Repositories;
 using SistemaEscolar.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IAlunoService, AlunoService>();
 builder.Services.AddScoped<ITurmaService, TurmaService>();
+builder.Services.AddScoped<IBoletimService, BoletimService>();
 
 var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString");
 
@@ -37,12 +40,25 @@ var app = builder.Build();
 
 app.UseExceptionHandler("/Erro/Index");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
 
+// Configuração de localização para pt-BR
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("pt-BR"),
+    SupportedCultures = new List<CultureInfo> { new CultureInfo("pt-BR") },
+    SupportedUICultures = new List<CultureInfo> { new CultureInfo("pt-BR") }
+});
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

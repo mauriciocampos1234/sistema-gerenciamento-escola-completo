@@ -1,13 +1,8 @@
-﻿namespace SistemaEscolar.Repositories.Entities
+﻿namespace SistemaEscolar.Services.Models.Boletim
 {
-    public class AlunoTurmaBoletim
+    public class AtualizarBoletimRequest
     {
-        public int Id { get; set; }
-
-        public int? AlunoId { get; set; }
-
-        public int? TurmaId { get; set; }
-
+        public int BoletimId { get; set; }
         public decimal? NotaBim1Escrita { get; set; }
 
         public decimal? NotaBim1Leitura { get; set; }
@@ -27,9 +22,5 @@
         public decimal? NotaFinalSemestre { get; set; }
 
         public int? FaltasSemestre { get; set; }
-
-        public Aluno? Aluno { get; set; }
-
-        public Turma? Turma { get; set; }
     }
 }
