@@ -40,10 +40,6 @@ var app = builder.Build();
 
 app.UseExceptionHandler("/Erro/Index");
 
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
