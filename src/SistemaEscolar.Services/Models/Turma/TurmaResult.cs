@@ -10,7 +10,7 @@
 
         public int ProfessorId { get; set; }
 
-        public required string ProfessorNome { get; set; }
+        public string? ProfessorNome { get; set; }
 
         public required string Periodo { get; set; }
 
