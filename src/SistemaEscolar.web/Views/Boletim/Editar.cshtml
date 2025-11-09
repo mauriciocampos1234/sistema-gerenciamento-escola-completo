@@ -29,17 +29,17 @@
             
                 <div class="col-sm-12 col-md-4">
                     <label class="form-label">Escrita (0-10)</label>
-                    <input type="number" id="notaBim1Escrita" class="form-control calcular1" step="any" placeholder="--" maxlength="3" asp-for="NotaBim1Escrita" />
+                    <input type="number" id="notaBim1Escrita" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular1" step="any" placeholder="--" maxlength="3" asp-for="NotaBim1Escrita" />
                 </div>
 
                 <div class="col-sm-12 col-md-4">
                     <label class="form-label">Leitura (0-10)</label>
-                    <input type="number" id="notaBim1Leitura" class="form-control calcular1" step="any" placeholder=" --" maxlength="3" asp-for="NotaBim1Leitura" />
+                    <input type="number" id="notaBim1Leitura" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular1" step="any" placeholder=" --" maxlength="3" asp-for="NotaBim1Leitura" />
                 </div>
 
                 <div class="col-sm-12 col-md-4">
                     <label class="form-label">Conversação (0-10)</label>
-                    <input type="number" id="notaBim1Conversacao" class="form-control calcular1" step="any" placeholder=" --" maxlength="3" asp-for="NotaBim1Conversacao" />
+                    <input type="number" id="notaBim1Conversacao" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular1" step="any" placeholder=" --" maxlength="3" asp-for="NotaBim1Conversacao" />
                </div>
             </div>
             <p class="m-0 pt-3">Nota final 1° Bimestre: <b id="notaBim1FinalExibicao">@(Model.NotaBim1Final.HasValue? Model.NotaBim1Final.Value : string.Empty)</b></p>
@@ -58,17 +58,17 @@
             
             <div class="col-sm-12 col-md-4">
                 <label class="form-label">Escrita (0-10)</label>
-                    <input type="number" id="notaBim2Escrita" class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Escrita" />
+                    <input type="number" id="notaBim2Escrita" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Escrita" />
             </div>
 
             <div class="col-sm-12 col-md-4">
                 <label class="form-label">Leitura (0-10)</label>
-                    <input type="number" id="notaBim2Leitura" class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Leitura" />
+                    <input type="number" id="notaBim2Leitura" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Leitura" />
             </div>
 
             <div class="col-sm-12 col-md-4">
                 <label class="form-label">Conversação (0-10)</label>
-                    <input type="number" id="notaBim2Conversacao" class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Conversacao" />
+                    <input type="number" id="notaBim2Conversacao" disabled=@(Model.PermiteEdicao ? null : "disabled") class="form-control calcular2" step="any" placeholder="--" maxlength="3" asp-for="NotaBim2Conversacao" />
             </div>
         </div>
         <p class="m-0 pt-3">Nota final 2° Bimestre: <b id="notaBim2FinalExibicao">@(Model.NotaBim2Final.HasValue? Model.NotaBim2Final.Value : string.Empty)</b></p>
@@ -86,7 +86,7 @@
             <div class="row gx-2 gy-3">
                 <div class="col-sm-12 col-md-4">
                     <label class="form-label">Faltas</label>
-                    <input type="number" class="form-control" placeholder="--" maxlength="3" asp-for="FaltasSemestre" />
+                    <input type="number" class="form-control" disabled=@(Model.PermiteEdicao ? null : "disabled") placeholder="--" maxlength="3" asp-for="FaltasSemestre" />
                 </div>
             </div>
             <p class="m-0 pt-3">Nota Final: <b id="notaFinalExibicao">@(Model.NotaFinalSemestre.HasValue ? Model.NotaFinalSemestre.Value : string.Empty)</b></p>
@@ -95,9 +95,12 @@
     </div>
     
 
-    <div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </div>
+    @if (Model.PermiteEdicao)
+    {
+        <div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    }
 
 </form>
 

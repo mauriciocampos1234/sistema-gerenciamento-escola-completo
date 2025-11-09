@@ -27,7 +27,7 @@ namespace SistemaEscolar.web.Controllers
 
             var model = result!.MapToEditarViewModel();
 
-            //model.PermitirEdicao = User.IsInRole("Administrador") || User.IsInRole("Professor");
+            model.PermiteEdicao = User.IsInRole("Administrador") || User.IsInRole("Professor");
 
             return View(model);
         }

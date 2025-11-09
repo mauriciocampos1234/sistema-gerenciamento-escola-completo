@@ -48,19 +48,25 @@ else
                         <td>@turma.Nivel</td>
 
                         <td>
-                            <a class="link-underline link-underline-opacity-0"
-                               asp-controller="Turma" asp-action="Editar" asp-route-id="@turma.Id">
-                                Editar
-                            </a>
+                            @if (Model.ExibirBotaoEditar)
+                            {
+                                <a class="link-underline link-underline-opacity-0" asp-controller="Turma" asp-action="Editar" asp-route-id="@turma.Id">Editar</a>
+                            }
+
+                            @if (Model.ExibirBotaoBoletim)
+                            {
+                                <a class="link-underline link-underline-opacity-0" asp-controller="Boletim" asp-action="Editar" asp-route-alunoId="@Model.AlunoId" asp-route-turmaId="@turma.Id">Boletim</a>
+                            }
                         </td>
+
                     </tr>
                 }
-
 
             </tbody>
 
         </table>
     </div>
 }
+
 
 
