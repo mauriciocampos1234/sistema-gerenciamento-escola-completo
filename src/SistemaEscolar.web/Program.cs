@@ -3,6 +3,7 @@ using SistemaEscolar.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using SistmaEscolar.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,6 +2,7 @@
 using SistemaEscolar.Repositories.Entities;
 using SistemaEscolar.Services.Mappings;
 using SistemaEscolar.Services.Models.Turma;
+using SistmaEscolar.Repositories;
 
 namespace SistemaEscolar.Services
 {

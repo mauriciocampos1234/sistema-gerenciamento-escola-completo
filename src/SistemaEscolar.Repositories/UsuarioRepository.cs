@@ -1,7 +1,6 @@
 ﻿using SistemaEscolar.Repositories.Entities;
 using MySql.Data.MySqlClient;
 
-
 namespace SistemaEscolar.Repositories
 {
     public interface IUsuarioRepository
@@ -65,7 +64,7 @@ namespace SistemaEscolar.Repositories
 
                 cmd.Parameters.AddWithValue("@login", usuario.Login);
                 cmd.Parameters.AddWithValue("@senha", usuario.Senha);
-                cmd.Parameters.AddWithValue("funcao_id", usuario.FuncaoId);
+                cmd.Parameters.AddWithValue("@funcao_id", usuario.FuncaoId);
 
                 conn.Open();
 
