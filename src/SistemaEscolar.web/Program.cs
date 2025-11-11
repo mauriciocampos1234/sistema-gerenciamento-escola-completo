@@ -7,7 +7,8 @@ using SistmaEscolar.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Services
+builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
 builder.Services
@@ -29,15 +30,13 @@ builder.Services.AddScoped<IBoletimService, BoletimService>();
 
 var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString");
 
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(c => new UsuarioRepository(connectionString!));
-builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(c => new ProfessorRepository(connectionString!));
-builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(c => new AlunoRepository(connectionString!));
-builder.Services.AddScoped<ITurmaRepository, TurmaRepository>(c => new TurmaRepository(connectionString!));
-builder.Services.AddScoped<IAlunoTurmaBoletimRepository, AlunoTurmaBoletimRepository>(c => new AlunoTurmaBoletimRepository(connectionString!));
-
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(_ => new UsuarioRepository(connectionString!));
+builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(_ => new ProfessorRepository(connectionString!));
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(_ => new AlunoRepository(connectionString!));
+builder.Services.AddScoped<ITurmaRepository, TurmaRepository>(_ => new TurmaRepository(connectionString!));
+builder.Services.AddScoped<IAlunoTurmaBoletimRepository, AlunoTurmaBoletimRepository>(_ => new AlunoTurmaBoletimRepository(connectionString!));
 
 var app = builder.Build();
-
 
 app.UseExceptionHandler("/Erro/Index");
 
@@ -47,7 +46,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Configuração de localização para pt-BR
+// Localização pt-BR
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture("pt-BR"),
@@ -56,15 +55,15 @@ app.UseRequestLocalization(new RequestLocalizationOptions
 });
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
+// Endpoints para Razor Pages e Controllers
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
