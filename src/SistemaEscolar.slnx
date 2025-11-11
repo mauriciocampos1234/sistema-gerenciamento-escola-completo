@@ -4,5 +4,6 @@
   </Folder>
   <Project Path="SistemaEscolar.Repositories/SistemaEscolar.Repositories.csproj" Id="5043aa74-2758-4d18-9cab-0d2a5178b6a1" />
   <Project Path="SistemaEscolar.Services/SistemaEscolar.Services.csproj" Id="dc05589f-2b56-4b30-b56e-8ad27e55f610" />
+  <Project Path="SistemaEscolar.Tests/SistemaEscolar.Tests.csproj" Id="59de6b82-bbd4-46da-a12b-b915eae4408e" />
   <Project Path="SistemaEscolar.web/SistemaEscolar.web.csproj" />
 </Solution>
