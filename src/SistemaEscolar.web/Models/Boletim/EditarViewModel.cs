@@ -32,6 +32,8 @@ namespace SistemaEscolar.web.Models.Boletim
 
         public int? FaltasSemestre { get; set; }
 
+        public bool PermiteEdicao { get; set; }
+
         internal AtualizarBoletimRequest MapToAtualizarBoletimRequest()
         {
             return new AtualizarBoletimRequest

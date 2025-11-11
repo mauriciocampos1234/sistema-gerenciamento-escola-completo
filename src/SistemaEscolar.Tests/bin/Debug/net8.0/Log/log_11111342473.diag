@@ -1,0 +1,16 @@
+2025-11-11T13:06:42.4785992+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Version: 1.4.3+c252b64ad913ea9411fc5d17bfd5580d2d061497
+2025-11-11T13:06:42.5230273+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Logging mode: asynchronous
+2025-11-11T13:06:42.5242767+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Logging level: Information
+2025-11-11T13:06:42.5242821+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION CreateBuilderAsync entry time: 13:06:42.444
+2025-11-11T13:06:42.5272380+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION PID: 21880
+2025-11-11T13:06:42.5273941+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Runtime information: win-x64 - .NET 8.0.21
+2025-11-11T13:06:42.5274052+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Runtime location: C:\Program Files\dotnet\shared\Microsoft.NETCore.App\8.0.21\System.Private.CoreLib.dll
+2025-11-11T13:06:42.5274142+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION IsDynamicCodeSupported: True
+2025-11-11T13:06:42.5274172+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Test module: C:\area-de-desenvolvimentos\sistemaescolar\src\SistemaEscolar.Tests\bin\Debug\net8.0\SistemaEscolar.Tests.dll
+2025-11-11T13:06:42.5276043+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION Command line arguments: '--server --diagnostic --diagnostic-verbosity Information --diagnostic-output-directory C:\area-de-desenvolvimentos\sistemaescolar\src\SistemaEscolar.Tests\bin\Debug\net8.0\Log --results-directory C:\area-de-desenvolvimentos\sistemaescolar\src\TestResults --client-port 52958'
+2025-11-11T13:06:42.5286412+00:00 Microsoft.Testing.Platform.Builder.TestApplication INFORMATION TESTINGPLATFORM_DEFAULT_HANG_TIMEOUT: ''
+2025-11-11T13:06:42.5516041+00:00 Microsoft.Testing.Platform.Hosts.TestHostBuilder INFORMATION Setting RegisterEnvironmentVariablesConfigurationSource: 'True'
+2025-11-11T13:06:42.5546261+00:00 Microsoft.Testing.Platform.Configurations.JsonConfigurationSource+JsonConfigurationProvider INFORMATION Config file 'C:\area-de-desenvolvimentos\sistemaescolar\src\SistemaEscolar.Tests\bin\Debug\net8.0\SistemaEscolar.Tests.testconfig.json' not found.
+2025-11-11T13:06:42.5555961+00:00 Microsoft.Testing.Platform.Hosts.TestHostBuilder INFORMATION Setting PlatformExitProcessOnUnhandledException: 'False', config file: False environment variable:  VSTest mode: False
+2025-11-11T13:06:42.7533332+00:00 Microsoft.Testing.Platform.Requests.TestHostTestFrameworkInvoker INFORMATION Test framework UID: 'MSTestExtension' Version: '3.6.4' DisplayName: 'MSTest' Description: 'MSTest Framework for Microsoft Testing Platform'
+2025-11-11T13:06:42.7651807+00:00 Microsoft.Testing.Extensions.VSTestBridge.ObjectModel.MessageLoggerAdapter WARNING O atributo Runsettings "MaxCpuCount" não tem suporte no Microsoft.Testing.Platform e será ignorado
