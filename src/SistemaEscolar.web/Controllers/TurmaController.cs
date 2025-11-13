@@ -217,6 +217,3 @@ namespace SistemaEscolar.Web.Controllers
         }
     }
 }
-
-
-

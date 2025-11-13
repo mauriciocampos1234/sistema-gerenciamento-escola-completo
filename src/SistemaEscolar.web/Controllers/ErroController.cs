@@ -14,7 +14,7 @@ namespace SistemaEscolar.web.Controllers
                 // Operador Ternário (? = Se) (: = Caso ao contrário)
                 MensagemErro = exceptionHandlerFeature == null ? "Erro inesperado" : exceptionHandlerFeature.Error.Message
             };
-            
+
             return View(model);
         }
     }

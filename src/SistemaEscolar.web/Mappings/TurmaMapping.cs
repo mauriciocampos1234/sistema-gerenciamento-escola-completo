@@ -25,7 +25,7 @@ namespace SistemaEscolar.web.Mappings
             {
                 Id = model.Id,
                 SemestreAno = $"{model.Semestre}° Semestre/{model.Ano}",
-                Professor = model.ProfessorNome,
+                Professor = model.ProfessorNome ?? string.Empty, // Corrigido para evitar atribuição nula
                 Nivel = model.Nivel,
                 Periodo = model.Periodo
             };

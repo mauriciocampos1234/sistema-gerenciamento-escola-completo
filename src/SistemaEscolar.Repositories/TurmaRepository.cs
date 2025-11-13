@@ -1,7 +1,8 @@
-﻿using SistemaEscolar.Repositories.Entities;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
+using SistemaEscolar.Repositories;
+using SistemaEscolar.Repositories.Entities;
 
-namespace SistemaEscolar.Repositories
+namespace SistmaEscolar.Repositories
 {
     public interface ITurmaRepository
     {
@@ -32,9 +33,8 @@ namespace SistemaEscolar.Repositories
 
             using (var conn = new MySqlConnection(ConnectionString))
             {
-                string query = @"INSERT INTO turma (ano, semestre, periodo, nivel, professor_id) 
-                                    VALUES (@ano, @semestre, @periodo, @nivel, @professor_id); 
-                                    SELECT LAST_INSERT_ID()";
+                string query = @"INSERT INTO turma (ano, semestre, periodo, nivel, professor_id) VALUES (@ano, @semestre, @periodo, @nivel, @professor_id); 
+                                 SELECT LAST_INSERT_ID()";
 
                 var cmd = new MySqlCommand(query, conn);
 
@@ -59,27 +59,12 @@ namespace SistemaEscolar.Repositories
                 var query = "UPDATE turma SET ano = @ano, semestre = @semestre, periodo = @periodo, nivel = @nivel, professor_id = @professor_id WHERE turma_id = @turma_id";
 
                 var cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@turma_id", turma.Id);
-                cmd.Parameters.AddWithValue("@semestre", turma.Semestre);
                 cmd.Parameters.AddWithValue("@ano", turma.Ano);
+                cmd.Parameters.AddWithValue("@semestre", turma.Semestre);
                 cmd.Parameters.AddWithValue("@periodo", turma.Periodo);
                 cmd.Parameters.AddWithValue("@nivel", turma.Nivel);
                 cmd.Parameters.AddWithValue("@professor_id", turma.ProfessorId);
-
-                conn.Open();
-
-                return cmd.ExecuteNonQuery();
-            }
-        }
-
-        public int? Apagar(int id)
-        {
-            using (var conn = new MySqlConnection(ConnectionString))
-            {
-                string query = "DELETE FROM turma WHERE turma_id = @turma_id";
-
-                var cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@turma_id", id);
+                cmd.Parameters.AddWithValue("@turma_id", turma.Id);
 
                 conn.Open();
 
@@ -230,6 +215,7 @@ namespace SistemaEscolar.Repositories
 
             return result;
         }
+
         public Turma? ObterPorId(int id)
         {
             Turma? result = null;
@@ -274,5 +260,19 @@ namespace SistemaEscolar.Repositories
             return result;
         }
 
+        public int? Apagar(int id)
+        {
+            using (var conn = new MySqlConnection(ConnectionString))
+            {
+                string query = "DELETE FROM turma WHERE turma_id = @turma_id";
+
+                var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@turma_id", id);
+
+                conn.Open();
+
+                return cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace SistemaEscolar.web.Mappings
                 Login = model.Login!,
                 Senha = model.Senha!
             };
-          
+
             return viewModel;
         }
 
