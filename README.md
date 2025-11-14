@@ -1,7 +1,7 @@
 # 💼 Projeto – Visão Geral
 
 <p align="center">
-  <img src="./image/f3.png" alt="Prévia 3" width="600px"/>
+  <img src="./image/f4.png" alt="Prévia 4" width="600px"/>
 </p>
 
 ## 📸 Prévia do Sistema
