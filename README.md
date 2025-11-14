@@ -1,0 +1,34 @@
+# 💼 Projeto – Visão Geral
+
+<p align="center">
+  <img src="./image/f3.png" alt="Prévia 3" width="600px"/>
+</p>
+
+## 📸 Prévia do Sistema
+
+<p align="center">
+  <img src="./image/f1.png" alt="Prévia 1" width="600px"/>
+  <br><br>
+  <img src="./image/f2.png" alt="Prévia 2" width="600px"/>
+</p>
+
+---
+
+## 🧩 Sobre o Projeto
+Este repositório apresenta uma solução desenvolvida com foco em organização, performance e boas práticas.  
+As imagens acima demonstram partes do fluxo e da interface do sistema.
+
+---
+
+## 🌐 Conecte-se Comigo
+
+<table>
+  <tr>
+    <td><strong>LinkedIn</strong></td>
+    <td><a href="www.linkedin.com/in/mauricio-campos-dev-full-stack" target="_blank">Acessar Perfil</a></td>
+  </tr>
+  <tr>
+    <td><strong>WhatsApp</strong></td>
+    <td><a href="https://wa.me/5512991020922" target="_blank">Enviar Mensagem</a></td>
+  </tr>
+</table>
