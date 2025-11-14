@@ -23,7 +23,7 @@ builder.Services
     {
         options.LoginPath = "/login";
         options.AccessDeniedPath = "/login";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(130);
     });
 
 builder.Configuration.AddEnvironmentVariables();
