@@ -1,0 +1,70 @@
+﻿@model SistemaEscolar.web.Models.Professor.EditarViewModel
+
+@{
+    ViewData["Title"] = "Editar Professor";
+}
+
+<h1 class="py-4">
+    Editar Professor
+</h1>
+
+<form class="row g-3 needs-validation" asp-controller="Professor" asp-action="Editar" novalidate>
+
+    <input type="hidden" asp-for="Id" /> 
+
+    <input type="hidden" asp-for="UsuarioId" />
+
+
+    <div class="col-12">
+        <label for="inputNome" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="inputNome" asp-for="Nome" placeholder="Nome completo" required>
+    </div>
+
+    <div class="col-12">
+        <label for="inputEmail" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="inputEmail" asp-for="Email" placeholder="Seu melhor E-mail" required>
+    </div>
+
+    <div class="col-md-6">
+        <label for="inputLogin" class="form-label">Login</label>
+        <input type="text" class="form-control" id="inputLogin" asp-for="Login" placeholder="Crie seu Login" required>
+    </div>
+
+    <div class="col-md-6">
+        <label for="inputSenha" class="form-label">Senha</label>
+        <input type="text" class="form-control" id="inputSenha" asp-for="Senha" placeholder="Crie uma Senha Forte" required>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+
+        <button type="submit" class="btn btn-danger mx-2" formaction="@Url.Action("Excluir", "Professor", new{id = Model.Id})">Apagar</button>
+    </div>
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger mt-4" })
+</form>
+
+@section Scripts {
+    <script>
+            //Pegando o código JS de valdiação do BootStrap-->
+         (() => {
+           'use strict'
+
+           // Busca todos os formulários aos quais queremos aplicar estilos de validação Bootstrap personalizados
+           const forms = document.querySelectorAll('.needs-validation')
+
+           // Faça um loop sobre eles e evite a submissão
+          Array.from(forms).forEach(form => {
+             form.addEventListener('submit', event => {
+               if (!form.checkValidity()) {
+                 event.preventDefault()
+                 event.stopPropagation()
+               }
+
+               form.classList.add('was-validated')
+             }, false)
+           })
+        })()
+    </script>
+}
+

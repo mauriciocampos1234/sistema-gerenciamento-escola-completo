@@ -1,39 +1,64 @@
-﻿using SistemaEscolar.Services;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SistemaEscolar.Services;
 using SistemaEscolar.web.Mappings;
 using SistemaEscolar.web.Models.Boletim;
 
-namespace SistemaEscolar.web.Controllers
+namespace SistemaEscolar.Web.Controllers
 {
+    [Authorize]
     [Route("boletim")]
     public class BoletimController : Controller
     {
         private readonly IBoletimService _boletimService;
+        private readonly IAlunoService _alunoService;
 
-        public BoletimController(IBoletimService boletimService)
+        public BoletimController(IBoletimService boletimService, IAlunoService alunoService)
         {
             _boletimService = boletimService;
+            _alunoService = alunoService;
         }
 
-        [Route("editar/{alunoId}/{turmaId}")]
-        public IActionResult Editar(int alunoId, int turmaId)
+        [HttpGet]
+        [Route("editar")]
+        public IActionResult Editar(int turmaId, int? alunoId)
         {
-            var result = _boletimService.ObterBoletimPorAlunoTurma(alunoId, turmaId);
+            int resolvedAlunoId = alunoId ?? 0;
 
-            if (result == null)
+            // Se alunoId não informado e usuário for Aluno, descobrir pelo usuário logado
+            if ((resolvedAlunoId == 0) && User.IsInRole("Aluno"))
             {
-                RedirectToAction("Editar", "Turma", new { id = turmaId });
+                var usuarioIdStr = User.FindFirst("Id")?.Value;
+                if (int.TryParse(usuarioIdStr, out var usuarioId))
+                {
+                    var aluno = _alunoService.ObterPorUsuarioId(usuarioId);
+                    if (aluno != null)
+                    {
+                        resolvedAlunoId = aluno.Id;
+                    }
+                }
             }
 
-            var model = result!.MapToEditarViewModel();
+            if (resolvedAlunoId == 0)
+            {
+                return RedirectToAction("Editar", "Turma", new { id = turmaId });
+            }
 
-            model.PermiteEdicao = User.IsInRole("Administrador") || User.IsInRole("Professor");
+            var boletim = _boletimService.ObterBoletimPorAlunoTurma(resolvedAlunoId, turmaId);
+            if (boletim == null)
+            {
+                return RedirectToAction("Editar", "Turma", new { id = turmaId });
+            }
 
-            return View(model);
+            var vm = boletim.MapToEditarViewModel();
+            vm.PermiteEdicao = User.IsInRole("Administrador") || User.IsInRole("Professor");
+
+            return View(vm);
         }
 
         [HttpPost]
-        [Route("editar/{alunoId}/{turmaId}")]
+        [Route("editar")]
+        [Authorize(Roles = "Administrador,Professor")]
         public IActionResult Editar(EditarViewModel model)
         {
             if (!ModelState.IsValid)
@@ -41,16 +66,15 @@ namespace SistemaEscolar.web.Controllers
                 return View(model);
             }
 
-            var request = model.MapToAtualizarBoletimRequest();//Fazer verificação se está mapeando corretamente
-
+            var request = model.AtualizarBoletimRequest();
             var result = _boletimService.Atualizar(request);
-
             if (!result.Sucesso)
             {
                 ModelState.AddModelError(string.Empty, result.MensagemErro!);
                 return View(model);
             }
 
+            // Agora redireciona para edição da turma
             return RedirectToAction("Editar", "Turma", new { id = model.TurmaId });
         }
     }

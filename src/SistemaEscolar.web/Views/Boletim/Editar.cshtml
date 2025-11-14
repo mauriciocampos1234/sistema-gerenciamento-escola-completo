@@ -18,6 +18,8 @@
 <form class="row g-2 mb-2 needs-validation" asp-controller="Boletim" asp-action="Editar" novalidate>
 
     <input type="hidden" asp-for="BoletimId" />
+    <input type="hidden" asp-for="TurmaId" /> <!-- adicionado -->
+    <input type="hidden" asp-for="AlunoId" /> <!-- adicionado -->
     
     <div class="card border my-4">
         <div class="card-header">
@@ -144,7 +146,7 @@
         const elementoNotaBim2FinalExibicao = document.getElementById('notaBim2FinalExibicao');
         const elementoNotaBim2Final = document.getElementById('notaBim2Final');
 
-        //Nota Final
+       //Nota Final
         const elementoNotaFinalExibicao = document.getElementById('notaFinalExibicao');
         const elementoNotaFinal = document.getElementById('notaFinal');
 

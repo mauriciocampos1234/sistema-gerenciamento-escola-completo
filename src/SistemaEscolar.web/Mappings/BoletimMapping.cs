@@ -11,6 +11,7 @@ namespace SistemaEscolar.web.Mappings
             {
                 BoletimId = model.BoletimId,
                 TurmaId = model.TurmaId,
+                AlunoId = model.AlunoId, // adicionado
                 NomeAluno = model.NomeAluno,
                 DescricaoTurma = $"{model.SemestreTurma}° Semestre/{model.AnoTurma} - {model.NivelTurma}, {model.PeriodoTurma}",
                 NotaBim1Escrita = model.NotaBim1Escrita,

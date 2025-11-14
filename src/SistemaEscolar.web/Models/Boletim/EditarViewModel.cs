@@ -8,6 +8,8 @@ namespace SistemaEscolar.web.Models.Boletim
 
         public int? TurmaId { get; set; }
 
+        public int? AlunoId { get; set; } // adicionado para redirecionar corretamente
+
         public string? NomeAluno { get; set; }
 
         public string? DescricaoTurma { get; set; }

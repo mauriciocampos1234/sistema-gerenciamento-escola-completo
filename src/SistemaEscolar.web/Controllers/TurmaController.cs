@@ -1,156 +1,144 @@
-﻿using SistemaEscolar.Services;
-using SistemaEscolar.web.Models.Turma;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SistemaEscolar.web.Mappings;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using SistemaEscolar.Services;
 using SistemaEscolar.Services.Models.Turma;
+using SistemaEscolar.web.Mappings;
+using SistemaEscolar.web.Models.Turma;
+using System.Security.Claims;
 
 namespace SistemaEscolar.Web.Controllers
 {
-    [Route("turma")]
     [Authorize]
+    [Route("turma")]
     public class TurmaController : Controller
     {
         private readonly ITurmaService _turmaService;
         private readonly IProfessorService _professorService;
         private readonly IAlunoService _alunoService;
 
-
-        public TurmaController(
-            ITurmaService turmaService,
-            IProfessorService professorService,
-            IAlunoService alunoService)
+        public TurmaController(ITurmaService turmaService, IProfessorService professorService, IAlunoService alunoService)
         {
             _turmaService = turmaService;
             _professorService = professorService;
             _alunoService = alunoService;
         }
 
-        [Route("criar")]
-        [Authorize(Roles = "Administrador")]
-        public IActionResult Criar()
+        [HttpGet]
+        [Route("listar")]
+        public IActionResult Listar()
         {
+            var isAdmin = User.IsInRole("Administrador");
+            var isProfessor = User.IsInRole("Professor");
+            var isAluno = User.IsInRole("Aluno");
 
-            var model = new CriarViewModel();
+            var model = new ListarViewModel
+            {
+                ExibirBotaoInserir = isAdmin,
+                ExibirBotaoEditar = isAdmin || isProfessor, // professor pode abrir tela para lançar notas
+                ExibirBotaoBoletim = isAluno // apenas aluno vê link direto para seu boletim na listagem
+            };
 
-            model.Semestres = ObterListaSemestres();
+            IList<TurmaResult> turmas;
 
-            model.Professores = ObterListaProfessores();
+            if (isProfessor)
+            {
+                var usuarioId = ObterUsuarioId();
+                turmas = _turmaService.ListarPorProfessor(usuarioId);
+            }
+            else if (isAluno)
+            {
+                var usuarioId = ObterUsuarioId();
+                turmas = _turmaService.ListarPorAluno(usuarioId);
+                model.AlunoId = ObterAlunoId(usuarioId);
+            }
+            else
+            {
+                turmas = _turmaService.Listar();
+            }
+
+            model.Turmas = turmas.Select(t => t.MapToTurmaViewModel()).ToList();
 
             return View(model);
         }
 
-        [HttpPost]
-        [Route("criar")]
+        [HttpGet]
         [Authorize(Roles = "Administrador")]
+        [Route("criar")]
+        public IActionResult Criar()
+        {
+            var vm = new CriarViewModel
+            {
+                Semestres = PreencherSemestres(),
+                Professores = PreencherProfessores()
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [Route("criar")]
         public IActionResult Criar(CriarViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                model.Semestres = PreencherSemestres();
+                model.Professores = PreencherProfessores();
                 return View(model);
             }
 
-            //criar a turma
-            var result = _turmaService.Criar(model.MapToCriarTurmaRequest());
-
+            var request = model.MapToCriarTurmaRequest();
+            var result = _turmaService.Criar(request);
             if (!result.Sucesso)
             {
                 ModelState.AddModelError(string.Empty, result.MensagemErro!);
-
+                model.Semestres = PreencherSemestres();
+                model.Professores = PreencherProfessores();
                 return View(model);
             }
 
             return RedirectToAction("Listar");
         }
 
-        [Route("listar")]
-        public IActionResult Listar()
-        {
-            IList<TurmaResult>? turmas = null;
-
-            var usuarioId = Convert.ToInt32(User.FindFirst("Id")?.Value);
-
-            int? alunoId = null;
-
-            if (User.IsInRole("Administrador"))
-            {
-                turmas = _turmaService.Listar();
-            }
-            else if (User.IsInRole("Professor"))
-            {
-
-                turmas = _turmaService.ListarPorProfessor(usuarioId);
-            }
-            else if (User.IsInRole("Aluno"))
-            {
-                turmas = _turmaService.ListarPorAluno(usuarioId);
-
-                var aluno = _alunoService.ObterPorUsuarioId(usuarioId);
-                if (aluno != null)
-                {
-                    alunoId = aluno.Id;
-                }
-            }
-
-            var result = new ListarViewModel
-            {
-                Turmas = turmas?.Select(c => c.MapToTurmaViewModel()).ToList(),
-                ExibirBotaoInserir = User.IsInRole("Administrador"),
-                ExibirBotaoEditar = User.IsInRole("Administrador") || User.IsInRole("Professor"),
-                ExibirBotaoBoletim = User.IsInRole("Aluno"),
-                AlunoId = alunoId
-            };
-
-            return View(result);
-        }
-
+        [HttpGet]
         [Route("editar/{id}")]
-        //[Authorize(Roles = "Administrador")]
         public IActionResult Editar(int id)
         {
             var turma = _turmaService.ObterPorId(id);
+            if (turma == null) return RedirectToAction("Listar");
 
-            if (turma == null)
-            {
-                return RedirectToAction("Listar");
-            }
+            var vm = turma.MapToEditarViewModel();
+            vm.Semestres = PreencherSemestres();
+            vm.Professores = PreencherProfessores();
+            vm.PodeEditarApagarTurma = User.IsInRole("Administrador"); // somente admin altera estrutura
 
-            var model = turma.MapToEditarViewModel();
+            var alunosTurma = _alunoService.ListarPorTurma(id);
+            vm.AlunosTurma = alunosTurma.Select(a => a.MapToAlunoTurmaViewModel()).ToList();
 
-            model.AlunosTurma = _alunoService.ListarPorTurma(id)
-                .Select(c => c.MapToAlunoTurmaViewModel()).ToList();
+            var alunos = _alunoService.Listar();
+            vm.Alunos = alunos.Select(a => a.MapToAlunoTurmaViewModel()).ToList();
 
-            model.Alunos = _alunoService.Listar()
-                .Select(c => c.MapToAlunoTurmaViewModel()).ToList();
-
-            model.Semestres = ObterListaSemestres();
-
-            model.Professores = ObterListaProfessores();
-
-            model.PodeEditarApagarTurma = User.IsInRole("Administrador");
-
-            return View(model);
+            return View(vm);
         }
 
-        [Route("editar/{id}")]
         [HttpPost]
         [Authorize(Roles = "Administrador")]
+        [Route("editar/{id}")]
         public IActionResult Editar(EditarViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                model.Semestres = PreencherSemestres();
+                model.Professores = PreencherProfessores();
                 return View(model);
             }
 
             var request = model.MapToEditarTurmaRequest();
-
             var result = _turmaService.Editar(request);
-
             if (!result.Sucesso)
             {
                 ModelState.AddModelError(string.Empty, result.MensagemErro!);
-
+                model.Semestres = PreencherSemestres();
+                model.Professores = PreencherProfessores();
                 return View(model);
             }
 
@@ -158,62 +146,75 @@ namespace SistemaEscolar.Web.Controllers
         }
 
         [HttpPost]
-        [Route("associarAlunos")]
         [Authorize(Roles = "Administrador")]
+        [Route("excluir/{id}")]
+        public IActionResult Excluir(int id)
+        {
+            var result = _turmaService.Excluir(id);
+            if (!result.Sucesso)
+            {
+                TempData["MensagemErro"] = result.MensagemErro;
+            }
+            return RedirectToAction("Listar");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [Route("desassociar-aluno")]
+        public IActionResult DesassociarAluno(int turmaId, int alunoId)
+        {
+            var result = _turmaService.DesassociarAlunoTurma(alunoId, turmaId);
+            if (!result.Sucesso)
+            {
+                TempData["MensagemErro"] = result.MensagemErro;
+            }
+            return RedirectToAction("Editar", new { id = turmaId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [Route("associar-alunos")]
         public IActionResult AssociarAlunos(int turmaId)
         {
-            foreach (var formItem in Request.Form)
+            // Coleta checkboxes aluno_{id}
+            var selecionados = Request.Form.Keys
+                .Where(k => k.StartsWith("aluno_") && Request.Form[k] == "on")
+                .Select(k => int.Parse(k.Split('_')[1]))
+                .ToList();
+
+            foreach (var alunoId in selecionados)
             {
-                if (formItem.Key.StartsWith("aluno_"))
-                {
-                    var alunoId = int.Parse(formItem.Key.Split("_")[1]);
-
-                    _turmaService.AssociarAlunoTurma(alunoId, turmaId);
-                }
-            }
-            return RedirectToAction("Editar", "Turma", new { id = turmaId });
-        }
-
-        [HttpPost]
-        [Route("desassociarAluno")]
-        [Authorize(Roles = "Administrador")]
-        public IActionResult DesassociarAluno(int alunoId, int turmaId)
-        {
-            _turmaService.DesassociarAlunoTurma(alunoId, turmaId);
-
-            return RedirectToAction("Editar", "Turma", new { id = turmaId });
-        }
-
-        [Route("excluir/{id}")]
-        [Authorize(Roles = "Administrador")]
-        [HttpPost]
-        public IActionResult Excluir(EditarViewModel model)
-        {
-            var result = _turmaService.Excluir(model.Id);
-
-            if (!result.Sucesso)
-            {
-                ModelState.AddModelError(string.Empty, result.MensagemErro!);
-
-                return View(model);
+                _turmaService.AssociarAlunoTurma(alunoId, turmaId);
             }
 
-            return RedirectToAction("Listar");
+            return RedirectToAction("Editar", new { id = turmaId });
         }
 
-        private List<SelectListItem> ObterListaSemestres()
+        private int ObterUsuarioId()
         {
-            return new List<SelectListItem>
+            var idStr = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            return int.TryParse(idStr, out var id) ? id : 0;
+        }
+
+        private int? ObterAlunoId(int usuarioId)
+        {
+            var aluno = _alunoService.ObterPorUsuarioId(usuarioId);
+            return aluno?.Id;
+        }
+
+        private List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> PreencherSemestres() =>
+            new()
             {
-                new SelectListItem { Text = "1º Semestre", Value = "1" },
-                new SelectListItem { Text = "2º Semestre", Value = "2" }
+                new("1º Semestre", "1"),
+                new("2º Semestre", "2"),
             };
-        }
 
-        private List<SelectListItem> ObterListaProfessores()
+        private List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> PreencherProfessores()
         {
-            return _professorService.Listar()
-                .Select(p => new SelectListItem(p.Nome, p.Id.ToString())).ToList();
+            var profs = _professorService.Listar();
+            return profs
+                .Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = p.Nome, Value = p.Id.ToString() })
+                .ToList();
         }
     }
 }

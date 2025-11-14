@@ -26,8 +26,8 @@ namespace SistemaEscolar.web.Models.Turma
 
         public IList<AlunoTurmaViewModel>? Alunos { get; set; } // Lista de alunos disponíveis para adicionar à turma
 
-        //Model add alunos da turma
-        public required IList<AlunoTurmaViewModel> AlunosTurma { get; set; }
+        // Removido required para não exigir sempre a lista na validação
+        public IList<AlunoTurmaViewModel> AlunosTurma { get; set; } = new List<AlunoTurmaViewModel>();
 
         public bool PodeEditarApagarTurma { get; set; }
 
