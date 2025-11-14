@@ -34,12 +34,18 @@ builder.Services.AddScoped<IAlunoService, AlunoService>();
 builder.Services.AddScoped<ITurmaService, TurmaService>();
 builder.Services.AddScoped<IBoletimService, BoletimService>();
 
+var databaseProvider = builder.Configuration["DatabaseProvider"] ?? "MySql";
 var connectionString = builder.Configuration.GetConnectionString("SistemaEscolarConnectionString");
 var connectionStringSqlServer = builder.Configuration.GetConnectionString("SistemaEscolarConnectionStringSqlServer");
 
-// Repositórios: Se a connection string do SQL Server estiver configurada, usa SQL Server, senão usa MySQL
-if (!string.IsNullOrEmpty(connectionStringSqlServer))
+// Repositórios: Usa o DatabaseProvider configurado no appsettings.json
+if (databaseProvider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase))
 {
+    if (string.IsNullOrEmpty(connectionStringSqlServer))
+    {
+        throw new InvalidOperationException("DatabaseProvider está configurado como 'SqlServer', mas a connection string 'SistemaEscolarConnectionStringSqlServer' não foi encontrada.");
+    }
+
     // Repositórios SQL Server
     builder.Services.AddScoped<IUsuarioRepository, UsuarioSqlServerRepository>(_ => new UsuarioSqlServerRepository(connectionStringSqlServer));
     builder.Services.AddScoped<IProfessorRepository, ProfessorSqlServerRepository>(_ => new ProfessorSqlServerRepository(connectionStringSqlServer));
@@ -49,12 +55,17 @@ if (!string.IsNullOrEmpty(connectionStringSqlServer))
 }
 else
 {
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("DatabaseProvider está configurado como 'MySql', mas a connection string 'SistemaEscolarConnectionString' não foi encontrada.");
+    }
+
     // Repositórios MySQL (padrão)
-    builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(_ => new UsuarioRepository(connectionString!));
-    builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(_ => new ProfessorRepository(connectionString!));
-    builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(_ => new AlunoRepository(connectionString!));
-    builder.Services.AddScoped<ITurmaRepository, TurmaRepository>(_ => new TurmaRepository(connectionString!));
-    builder.Services.AddScoped<IAlunoTurmaBoletimRepository, AlunoTurmaBoletimRepository>(_ => new AlunoTurmaBoletimRepository(connectionString!));
+    builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>(_ => new UsuarioRepository(connectionString));
+    builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>(_ => new ProfessorRepository(connectionString));
+    builder.Services.AddScoped<IAlunoRepository, AlunoRepository>(_ => new AlunoRepository(connectionString));
+    builder.Services.AddScoped<ITurmaRepository, TurmaRepository>(_ => new TurmaRepository(connectionString));
+    builder.Services.AddScoped<IAlunoTurmaBoletimRepository, AlunoTurmaBoletimRepository>(_ => new AlunoTurmaBoletimRepository(connectionString));
 }
 
 var app = builder.Build();

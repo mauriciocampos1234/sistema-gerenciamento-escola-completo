@@ -41,6 +41,8 @@ O provider do banco de dados é configurado no `appsettings.json`:
 - `"DatabaseProvider": "MySql"` - Para usar MySQL
 - `"DatabaseProvider": "SqlServer"` - Para usar SQL Server
 
+**Importante:** As connection strings NÃO devem estar no `appsettings.json`. Elas devem ser configuradas apenas nos User Secrets ou variáveis de ambiente por questões de segurança.
+
 ## Exemplo de Connection Strings
 
 ### MySQL
