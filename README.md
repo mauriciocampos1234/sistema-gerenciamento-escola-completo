@@ -32,8 +32,8 @@ As imagens acima demonstram partes do fluxo e da interface do sistema.
     <td><a href="https://wa.me/5512991020922" target="_blank">Enviar Mensagem</a></td>
   </tr>
   <tr>
-    <td><strong>Notion(Arquitetura)</strong></td>
-    <td><a href="[https://wa.me/5512991020922](https://www.notion.so/276051526fff80e1aa1fd222916c13fd?v=276051526fff81f0972f000c21386f34&source=copy_link)" target="_blank">Enviar Mensagem</a></td>
+    <td><strong>Notion</strong></td>
+    <td><a href="https://www.notion.so/276051526fff80e1aa1fd222916c13fd?v=276051526fff81f0972f000c21386f34&source=copy_link" target="_blank">Ver Arquitetura</a></td>
   </tr>
 </table>
 
