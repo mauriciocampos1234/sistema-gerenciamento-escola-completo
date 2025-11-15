@@ -182,7 +182,7 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
   </tr>
   <tr>
     <td><strong>Meu Site Pessoal</strong></td>
-    <td><a href="https://site-mauricio-campos.vercel.app/" target="_blank">Ver Arquitetura do Projeto</a></td>
+    <td><a href="https://site-mauricio-campos.vercel.app/" target="_blank">Acessar Site</a></td>
   </tr>
 </table>
 
