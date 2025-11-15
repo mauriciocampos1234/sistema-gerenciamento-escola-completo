@@ -19,7 +19,7 @@ As imagens acima demonstram partes do fluxo e da interface do sistema.
 # 📘 Detalhamento de Requisitos
 
 ## 🎯 Objetivo Geral
-Construir um sistema de gestão para a escola **EnglishNow**, com acesso restrito a administradores, professores e alunos, utilizando **login e senha**.  
+Construir um sistema de gestão para a escola **EnglishSchool**, com acesso restrito a administradores, professores e alunos, utilizando **login e senha**.  
 Cada perfil possui funcionalidades específicas, garantindo segurança e organização no processo de gestão acadêmica.
 
 ---
