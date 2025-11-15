@@ -180,6 +180,10 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
     <td><strong>App Notion</strong></td>
     <td><a href="https://www.notion.so/276051526fff80e1aa1fd222916c13fd?v=276051526fff81f0972f000c21386f34&source=copy_link" target="_blank">Ver Arquitetura do Projeto</a></td>
   </tr>
+  <tr>
+    <td><strong>Meu Site Pessoal</strong></td>
+    <td><a href="https://site-mauricio-campos.vercel.app/" target="_blank">Ver Arquitetura do Projeto</a></td>
+  </tr>
 </table>
 
 ---
