@@ -169,15 +169,17 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
 
 E para não precisar baixar, subi no Azure:
 
-https://englishschool.azurewebsites.net/login
+<a href="https://englishschool.azurewebsites.net/login" target="_blank">
+  https://englishschool.azurewebsites.net/login
+</a>
 
 **Login do Administrador:**  
-- Usuário: **Admin**  
+- Usuário: **admin**  
 - Senha: **123**
 
 ### ⚠️ Observação Importante
-- Caso, ao logar, apareça mensagem de **expiração**, clique em **Sair** e faça login novamente.  
-- Isso ocorre porque está habilitado o modo **Serverless hibernável do Azure**, para evitar cobranças, mesmo utilizando o **SQL Server gratuito** do Azure.
+- Caso, ao logar **(Pode ser que demore cerca de 28 milesegundos para o servidor provocar a página de erro)**, apareça mensagem de **expiração**, clique em **Sair** e faça login novamente.  
+- Isso ocorre porque está habilitado o modo **Serverless hibernável do Azure**, para evitar cobranças, mesmo utilizando o **SQL Server gratuito (Que por padrão já hiberna automaticamente)** do Azure.
 
 ---
 
