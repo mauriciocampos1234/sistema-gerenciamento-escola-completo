@@ -194,7 +194,7 @@ https://englishschool.azurewebsites.net/login
 4. Criar um **Aluno**.  
 5. Criar uma **Turma**.  
 6. Associar um **Aluno** à Turma.  
-   - Não lance notas e faltas — deixe isso para o professor.
+   - Não lance notas e faltas (Deixe isso para o professor).
 
 ---
 
@@ -229,9 +229,8 @@ https://englishschool.azurewebsites.net/login
 Ao final, faça o processo de exclusão na ordem correta:
 
 1. Logar novamente como **Admin**.  
-2. Excluir na seguinte ordem:  
-   - **Aluno da Turma**  
-   - **Boletim**  
+2. Excluir na seguinte ordem na **Turma** criada:  
+   - **Alunos da Turma**  
    - **Turma**  
    - **Professor**  
    - **Aluno**
