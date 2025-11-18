@@ -169,7 +169,7 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
 
 ### Acesse o sistema hospedado no Azure:
 ➡️ **https://englishschool.azurewebsites.net/login**
-#### Ps.: Com o botão direito do mouse, opte por "Abrir em um novo separador" ####
+##### Ps.: Com o botão direito do mouse, opte por "Abrir link num novo separador" #####
 
 ---
 
