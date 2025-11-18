@@ -173,6 +173,8 @@ E para não precisar baixar, subi no Azure:
   https://englishschool.azurewebsites.net/login
 </a>
 
+---
+
 **Login do Administrador:**  
 - Usuário: **admin**  
 - Senha: **123**
