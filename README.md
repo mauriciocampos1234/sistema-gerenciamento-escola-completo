@@ -165,6 +165,79 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
 
 ---
 
+## 🔗 Ambiente Online para Testes
+
+E para não precisar baixar, subi no Azure:
+
+https://englishschool.azurewebsites.net/login
+
+**Login do Administrador:**  
+- Usuário: **Admin**  
+- Senha: **123**
+
+### ⚠️ Observação Importante
+- Caso, ao logar, apareça mensagem de **expiração**, clique em **Sair** e faça login novamente.  
+- Isso ocorre porque está habilitado o modo **Serverless hibernável do Azure**, para evitar cobranças, mesmo utilizando o **SQL Server gratuito** do Azure.
+
+---
+
+## 🧪 Como Testar o Sistema no Ambiente Online
+
+### 👨‍💼 Teste como Administrador
+1. Logar como **Admin**.  
+2. Testar o CRUD completo de:  
+   - Alunos  
+   - Professores  
+   - Turmas  
+   - Boletim  
+3. Criar um **Professor**.  
+4. Criar um **Aluno**.  
+5. Criar uma **Turma**.  
+6. Associar um **Aluno** à Turma.  
+   - Não lance notas e faltas — deixe isso para o professor.
+
+---
+
+### 👨‍🏫 Teste como Professor
+1. Sair do sistema.  
+2. Logar como **Professor** criado anteriormente.  
+3. Visualizar suas:  
+   - Turmas  
+   - Alunos  
+4. Acessar o **Boletim** de um aluno e lançar:  
+   - Notas  
+   - Faltas  
+5. O sistema calculará automaticamente:  
+   - Média do bimestre  
+   - Média do semestre  
+   - Aprovação/Reprovação
+
+---
+
+### 👨‍🎓 Teste como Aluno
+1. Sair do sistema.  
+2. Logar como **Aluno** criado anteriormente.  
+3. Visualizar:  
+   - Seus dados  
+   - Sua turma  
+   - Seu boletim  
+   - Suas notas e faltas
+
+---
+
+### 🗑️ Finalizando os Testes
+Ao final, faça o processo de exclusão na ordem correta:
+
+1. Logar novamente como **Admin**.  
+2. Excluir na seguinte ordem:  
+   - **Aluno da Turma**  
+   - **Boletim**  
+   - **Turma**  
+   - **Professor**  
+   - **Aluno**
+
+
+
 # 🌐 Conecte-se Comigo
 
 <table>
