@@ -167,11 +167,8 @@ Cada perfil possui funcionalidades específicas, garantindo segurança e organiz
 
 ## 🔗 Ambiente Online para Testes
 
-E para não precisar baixar, subi no Azure:
-
-<a href="https://englishschool.azurewebsites.net/login" target="_blank">
-  https://englishschool.azurewebsites.net/login
-</a>
+### Acesse o sistema hospedado no Azure:
+➡️ **https://englishschool.azurewebsites.net/login**
 
 ---
 
